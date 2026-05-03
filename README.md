@@ -109,7 +109,7 @@ There's also a discipline of stopping. After R2 — sometimes R3 — you hit dim
 
 The floor is **≥ 9.0 AND 0 C/I**. Don't ship below it. Don't keep reviewing above it.
 
-For the formal protocol — round structure, modality definitions, verdict schema, anti-patterns — see [`PROTOCOL.md`](./PROTOCOL.md).
+For the formal protocol — round structure, modality definitions, verdict schema, anti-patterns — see [`PROTOCOL.md`](./PROTOCOL.md). For a complete end-to-end R1→R2 cycle on a synthetic code change, see [`examples/r1-r2-walkthrough.md`](./examples/r1-r2-walkthrough.md).
 
 ---
 
@@ -121,17 +121,9 @@ The name is irreverent on purpose. The protocol is serious.
 
 ---
 
-## Related
+## About
 
-Other methodology pieces from the ORCA build are in development. Follow [GitHub](https://github.com/moranbickel) for updates.
-
-## About ORCA
-
-ORCA is a production legal-AI system for Israeli civil litigation drafts. It's built on a zero-fabrication principle: every claim in generated text traces back to verified source material, with substantive correctness gates at every layer of the pipeline. The system is closed-source while in development; methodology like this protocol — the disciplines that made the system possible — is open.
-
-## About the author
-
-Moran Bickel is an Israeli litigator and the founder of ORCA. He focuses on civil litigation and international arbitration, and is admitted to the Israel Bar. Connect via [GitHub](https://github.com/moranbickel) for updates on the methodology series.
+This protocol was developed for use in production on ORCA, a legal-AI system for Israeli civil litigation. The system is closed-source; the methodology that produced it is open. Maintained by [Moran Bickel](https://github.com/moranbickel), Israeli litigator and ORCA's founder.
 
 ---
 
