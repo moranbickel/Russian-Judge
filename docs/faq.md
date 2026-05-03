@@ -6,7 +6,7 @@ Anticipated questions about Russian Judge.
 
 ### Why "Russian Judge"?
 
-Figure-skating commentary trope: the Russian judge gives the lowest scores. The name captures the spirit — a reviewer's job is to find what's wrong, not to validate that things look right. The name is irreverent; the protocol is serious.
+Figure-skating commentary trope: the Russian judge always gives the lowest scores. The name captures the spirit — find what's wrong, don't validate what looks right. The name is irreverent; the protocol is serious.
 
 ---
 

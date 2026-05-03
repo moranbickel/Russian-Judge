@@ -34,7 +34,7 @@ That's the loop.
 
 ### Day 1–2: Run RJ on every non-trivial change.
 
-You're calibrating the reviewer to your work and yourself to the protocol. Expect noise in the first few verdicts — Minors that aren't Minors, classification calls you disagree with. Don't fix it yet. Just observe.
+You're calibrating the reviewer to your work and yourself to the protocol. Expect noise in the first few verdicts — Minors that aren't Minors, classification calls you disagree with. Don't fix it yet. Just observe. (You're intentionally widening the gate during calibration to learn the protocol's noise floor — Day 3–4 will tighten it back via the pre-check gate.)
 
 ### Day 3–4: Start using the pre-check gate.
 

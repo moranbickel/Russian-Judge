@@ -14,7 +14,7 @@ I tried the next obvious thing: ask the model to score the work. "Rate this 1–
 
 The scores were also agreeable. 8.5. 9.0. 8.7. The score moved a tenth or two but never delivered information. A 9.0 from this kind of reviewer was indistinguishable from an 8.5; both meant "no major flags." The number was a vibe.
 
-I shipped a fix once that scored 8.5/10 in this regime. It broke production three days later. The reviewer's findings — vague, unprioritized, mixed in with stylistic suggestions — had buried the defect under cosmetic noise.
+The 8.5/10-then-broke-production incident referenced in the README is the example I keep coming back to. The reviewer's findings — vague, unprioritized, mixed in with stylistic suggestions — had buried the defect under cosmetic noise. The score told me the work was acceptable. The structure of the review told me nothing about which of the comments mattered.
 
 That was the moment I built the protocol. Three things had to change:
 

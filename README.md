@@ -2,7 +2,7 @@
 
 **A protocol for adversarial AI review.** A reviewer model is given an explicitly adversarial role and returns a structured verdict: a score from 0 to 10, plus a list of findings classified as Critical, Important, or Minor. Pass floor: **≥ 9.0 with zero Critical or Important findings**. Anything else means another round.
 
-I've used this on production code, formal specs, legal drafts, and prose. It's the single highest-leverage protocol I built while developing ORCA, a production legal-AI system. This repo is the public version.
+I've used this on production code, formal specs, legal drafts, and prose. It's one of the highest-leverage protocols I built while developing ORCA, a production legal-AI system. This repo is the public version.
 
 ---
 
@@ -115,7 +115,7 @@ For the formal protocol — round structure, modality definitions, verdict schem
 
 ## Why "Russian Judge"
 
-A long-running joke from figure-skating commentary: the Russian judge gives the lowest scores. The name stuck because it captures the spirit of the protocol — the reviewer's job is to find what's wrong, not to validate that things look right. A reviewer who returns a 9.8 on every submission is a broken reviewer. A reviewer who finds two Important issues on a clean piece of work has done their job.
+Figure-skating commentary trope: the Russian judge always gives the lowest scores. The name captures the spirit — find what's wrong, don't validate what looks right. A reviewer who returns a 9.8 on every submission is broken. A reviewer who finds two Important issues on a clean piece of work has done their job.
 
 The name is irreverent on purpose. The protocol is serious.
 
@@ -123,18 +123,15 @@ The name is irreverent on purpose. The protocol is serious.
 
 ## Related
 
-This is one of five methodology pieces from building [ORCA](#about-orca). The others:
-
-- **Three-Body Protocol** — coordinating Claude project + Claude Code + a human operator.
-- **CSAE** — attestation chains for AI-generated commits.
-- **Engineering Rules** — a rules-from-failures collection.
-- **STATUS_NOW Discipline** — 50-line living handoff for AI sessions.
-
-Links to be added as repos publish.
+Other methodology pieces from the ORCA build are in development. Follow [GitHub](https://github.com/moranbickel) for updates.
 
 ## About ORCA
 
-ORCA is a production legal-AI system that generates Israeli civil litigation drafts from structured client intake. It's built on the principle that AI-generated legal text needs substantive correctness gates at every layer — not just stylistic review. Closed-source while in development; the methodology that produced it, including this protocol, is open. See my [GitHub profile](https://github.com/moranbickel) for the full body of work.
+ORCA is a production legal-AI system for Israeli civil litigation drafts. It's built on a zero-fabrication principle: every claim in generated text traces back to verified source material, with substantive correctness gates at every layer of the pipeline. The system is closed-source while in development; methodology like this protocol — the disciplines that made the system possible — is open.
+
+## About the author
+
+Moran Bickel is an Israeli litigator and the founder of ORCA. He focuses on civil litigation and international arbitration, and is admitted to the Israel Bar. Connect via [GitHub](https://github.com/moranbickel) for updates on the methodology series.
 
 ---
 
