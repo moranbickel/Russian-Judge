@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+title: "Russian Judge: A Protocol for Adversarial AI Review"
+message: "If you use this work, please cite it as below."
+type: software
+authors:
+  - family-names: Bickel
+    given-names: Moran
+version: "1.0"
+date-released: "2026-05-03"
+url: "https://github.com/moranbickel/russian-judge"
+repository-code: "https://github.com/moranbickel/russian-judge"
+license:
+  - MIT
+  - CC-BY-4.0
+abstract: "Adversarial AI review with structured verdicts — C/I/M defect taxonomy, numerical pass floor, single- and cross-model audit modes."
+keywords:
+  - ai-evaluation
+  - llm-evaluation
+  - adversarial-review
+  - cross-model-audit
+  - code-review
+  - ai-quality
+  - prompt-engineering
