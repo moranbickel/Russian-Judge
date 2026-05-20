@@ -171,7 +171,7 @@ This is the first of six methodology pieces from building ORCA:
 
 ## About
 
-This protocol was developed for use in production on ORCA, a legal-AI system for Israeli civil litigation. The system is closed-source; the methodology that produced it is open. Maintained by [Moran Bickel](https://github.com/moranbickel), Israeli litigator and ORCA's founder.
+This protocol was developed for use in production on ORCA (Orchestrated Reasoning for Civil Action), an AI legal reasoning system for Israeli civil litigation. The system is closed-source; the methodology that produced it is open. Maintained by [Moran Bickel](https://github.com/moranbickel), Israeli litigator and ORCA's founder.
 
 ---
 
