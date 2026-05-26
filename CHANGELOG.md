@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- README.md — added a **Prior art** section engaging the LLM-as-judge literature (Zheng et al. 2023, HELM) and stating what RJ does and does not inherit from it.
+- examples/disputed-finding-walkthrough.md — new worked example covering a disputed finding (the author believes the reviewer is wrong): the false-positive-vs-latent-fragility decomposition, why a Critical is not author-overridable, and cross-model dispatch as the dispute resolver.
+
 ## v1.0 — 2026-05-03
 
 Initial public release.

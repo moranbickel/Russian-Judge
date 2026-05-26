@@ -218,5 +218,6 @@ Author ships. Optionally addresses M-3 in a follow-up — non-blocking.
 - Dual RJ on a change that touches both code and domain content (run two independent sessions).
 - Cross-model dispatch (running R2 on a different model from R1 — sometimes catches what R1 missed).
 - The pre-check gate decision (this change clearly invokes RJ — touches a contract, introduces a new failure mode).
+- A disputed finding — where the author believes the reviewer is wrong. That's the protocol's hardest judgment call; it has its own walkthrough: [`disputed-finding-walkthrough.md`](./disputed-finding-walkthrough.md).
 
 For those, see [PROTOCOL.md](../PROTOCOL.md) §9 (Modalities) and [`templates/pre-check-gate.md`](../templates/pre-check-gate.md).

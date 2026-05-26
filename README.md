@@ -24,7 +24,7 @@ That last piece is the one that matters most. The score alone is a vibe. The sco
 
 ## What RJ is not
 
-RJ is **not** a claim that LLM reviewers are reliably correct. The reviewer can still miss defects, hallucinate findings, or misclassify severity. Recent research on LLM-as-judge systems documents real failure modes — bias, prompt-injection vulnerability, score drift.
+RJ is **not** a claim that LLM reviewers are reliably correct. The reviewer can still miss defects, hallucinate findings, or misclassify severity. Recent research on LLM-as-judge systems documents real failure modes — bias, prompt-injection vulnerability, score drift (see [Prior art](#prior-art) below).
 
 The protocol's value is not oracle-level correctness. Its value is forcing every review into:
 
@@ -54,6 +54,17 @@ Three common approaches to AI-assisted review, side by side. Use the one that fi
 | Best for | Quick sanity checks, exploratory work | Pre-merge gate on every change that can introduce a new failure mode | Architecture, judgment calls, regulated-domain decisions |
 
 RJ doesn't replace human review — it makes the cases where humans aren't practical (every commit, late-night, weekends, every paragraph of a draft) reviewed at all, with structured output a human can audit later.
+
+---
+
+## Prior art
+
+The academic cousin of this protocol is **LLM-as-judge**: using a language model to score another model's output. Zheng et al. (2023) formalized it for evaluating chat assistants and, in the same work, named its failure modes — position bias, verbosity bias, self-enhancement bias, and weak reasoning on hard problems.[^mtbench] Holistic benchmarks like HELM evaluate models across many scenarios and metrics.[^helm] But that literature is about *ranking and evaluating models*; Russian Judge is about *gating one work product before it ships*. Same mechanism (an LLM produces a structured judgment), different goal.
+
+The distinction that matters is what RJ refuses to inherit. The biases Zheng et al. document are exactly why RJ does not treat the verdict as an oracle: it primes the reviewer adversarially to fight the sycophancy and self-enhancement tendency, it puts the ship decision on the human Operator rather than the model, and it recommends cross-model dispatch for high-stakes work so no single model's bias is load-bearing. RJ is the LLM-as-judge idea wrapped in a contract and a loop — with the known failure modes named and bracketed, not assumed away.
+
+[^mtbench]: Zheng et al., *Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*, NeurIPS 2023. [arXiv:2306.05685](https://arxiv.org/abs/2306.05685).
+[^helm]: Liang et al., *Holistic Evaluation of Language Models (HELM)*, 2022. [arXiv:2211.09110](https://arxiv.org/abs/2211.09110).
 
 ---
 
@@ -144,7 +155,7 @@ There's also a discipline of stopping. After R2 — sometimes R3 — you hit dim
 
 The floor is **≥ 9.0 AND 0 C/I**. Don't ship below it. Don't keep reviewing above it.
 
-For the formal protocol — round structure, modality definitions, verdict schema, anti-patterns — see [`PROTOCOL.md`](./PROTOCOL.md). For a complete end-to-end R1→R2 cycle on a synthetic code change, see [`examples/r1-r2-walkthrough.md`](./examples/r1-r2-walkthrough.md).
+For the formal protocol — round structure, modality definitions, verdict schema, anti-patterns — see [`PROTOCOL.md`](./PROTOCOL.md). For a complete end-to-end R1→R2 cycle on a synthetic code change, see [`examples/r1-r2-walkthrough.md`](./examples/r1-r2-walkthrough.md). For the harder case — a finding the author believes is a false positive — see [`examples/disputed-finding-walkthrough.md`](./examples/disputed-finding-walkthrough.md).
 
 ---
 
