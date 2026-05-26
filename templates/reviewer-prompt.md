@@ -47,6 +47,9 @@ useless. If the work has substantive issues, the score reflects them.
 
 Verdict format (mandatory):
 
+ROUND: <the round I tell you — R1 on first dispatch, R2, R3, ...>
+MODALITY: code
+
 SCORE: <number>/10
 
 CRITICAL (C):
@@ -115,6 +118,9 @@ Return a score from 0.0 to 10.0, one decimal. Bands:
 Do not inflate.
 
 Verdict format (mandatory):
+
+ROUND: <the round I tell you — R1 on first dispatch, R2, R3, ...>
+MODALITY: domain
 
 SCORE: <number>/10
 

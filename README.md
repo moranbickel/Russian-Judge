@@ -18,7 +18,7 @@ Russian Judge fixes this with three pieces of structure:
 2. **A defect taxonomy** with three classes: Critical, Important, Minor. Every finding has a class. No class, no finding.
 3. **A pass floor** that's a function of both the score and the findings: **≥ 9.0 AND zero C/I**. A 9.5 with one Critical finding doesn't pass. A 9.0 with three Minors does.
 
-That last piece is the one that matters most. The score alone is a vibe. The score combined with the floor is a contract.
+That last piece is the one that matters most. The score alone is a vibe. The score combined with the floor is a contract — a contract over the *decision* (given the findings as classified), not a guarantee the reviewer classified them correctly. That second gap is real, and the next section is about it.
 
 ---
 
