@@ -132,7 +132,7 @@ The 15-minute version is in [`docs/how-to-adopt.md`](./how-to-adopt.md). Functio
 
 ### Did you really build this for legal-AI work?
 
-Yes. ORCA is a production system that generates Israeli civil litigation drafts. The cost of a wrong fact, citation, or claim in a legal filing is non-trivial — sanctions, malpractice exposure, lost cases. Vague review wasn't tenable. RJ emerged from needing structure.
+Yes. ORCA is a production AI legal reasoning system for Israeli civil litigation — a decision system, not a document generator. The cost of a wrong fact, citation, or claim in a legal filing is non-trivial — sanctions, malpractice exposure, lost cases. Vague review wasn't tenable. RJ emerged from needing structure.
 
 The protocol generalized cleanly to non-legal work, which is why this repo exists. But the adversarial framing and the strict floor came from a context where defects had real cost.
 
