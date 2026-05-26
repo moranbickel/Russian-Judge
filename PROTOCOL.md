@@ -75,6 +75,9 @@ The reviewer returns a single score in `[0.0, 10.0]` with one decimal of precisi
 **§4.2 Scoring is an opinion, the floor is a contract.**
 The score is the reviewer's holistic judgment. It is fallible. The pass floor is not the score alone — it is `score ≥ 9.0 AND C = 0 AND I = 0`. A score of 9.5 with one Critical finding does not pass. A score of 9.0 with three Minors does. The conjunction is non-negotiable.
 
+**§4.2.1 What the contract binds — and what it does not.**
+The floor is a contract over the *pass decision*: given the findings as classified, ship/no-ship is determined by rule, not by operator mood or reviewer tone. It removes discretion-creep ("it's basically fine, ship it"). It does **not** guarantee the reviewer classified correctly — a reviewer that misclassifies a Critical as Minor passes the floor silently, and the floor itself has no internal detection loop for that. That residual risk lives in the reviewer-reliability layer, not the floor; RJ mitigates it (classify-upward-when-uncertain in the priming, cross-model dispatch for high-stakes work per §9, and the Operator owning the final ship decision) but does not eliminate it. The floor makes the *decision rule* honest; it does not make the reviewer infallible.
+
 **§4.3 No score inflation.**
 The reviewer is primed to score conservatively. A reviewer that defaults to 9+ on every submission is broken. The operator should periodically audit verdicts for distribution; if scores cluster above 9.0 without corresponding empirical quality, re-prime the reviewer.
 
@@ -100,7 +103,7 @@ The protocol halts when any of the following hold:
 - **Pass.** Floor met (`score ≥ 9.0 AND C = 0 AND I = 0`).
 - **Diminishing-returns halt.** After R2 (sometimes R3), if findings begin to be cosmetic preferences rather than substantive issues, the Operator halts and ships at the current verdict if the floor is met. The protocol assumes good-faith application of the floor — Operators do not run a fourth round looking for reassurance.
 - **Escalation halt.** If R3 still fails the floor, the protocol escalates to either (a) a different reviewer (per §9 modalities), or (b) human review. Continuing to dispatch the same reviewer past R3 on the same work product wastes cycles.
-- **Operator override.** The Operator may halt at any verdict that includes only Important findings if the Operator accepts the residual risk and documents the override. Critical findings are not subject to override.
+- **Operator override.** The Operator may halt at any verdict that includes only Important findings if the Operator accepts the residual risk and documents the override. The override record must name *who* authorized it, *which* Important findings are being accepted, the *residual-risk rationale*, and the *date* — captured wherever verdicts are stored (commit message, review log, or PR comment). An override without that record is indistinguishable from ignoring the finding. Critical findings are not subject to override.
 
 **§5.6 Round-count discipline.**
 Most work products converge in 1–2 rounds. A work product that requires more than 3 rounds is signaling that the underlying change is poorly scoped, not that it needs more review.
@@ -129,6 +132,9 @@ The priming explicitly *does not* contain phrases like "be helpful," "give const
 The reviewer returns a verdict in the following format. The format is mandatory; deviations are treated as malformed responses.
 
 ```
+ROUND: R<n>
+MODALITY: code | domain | dual
+
 SCORE: <number with one decimal>/10
 
 CRITICAL (C):
@@ -151,7 +157,7 @@ VERDICT: PASS | REVISE | REWORK
 
 `PASS` requires `score ≥ 9.0 AND C = 0 AND I = 0`. `REVISE` is the default below the floor. `REWORK` is reserved for `score < 7.0` — signaling the work product needs structural rather than incremental change.
 
-A JSON variant of the format is in [`templates/verdict-template.md`](./templates/verdict-template.md) for programmatic pipelines.
+`ROUND` and `MODALITY` echo the dispatch (the round you are on; the priming you were given) and are required by [`schemas/verdict.schema.json`](./schemas/verdict.schema.json) — a verdict that omits them fails validation. A JSON variant of the format is in [`templates/verdict-template.md`](./templates/verdict-template.md) for programmatic pipelines.
 
 ---
 
