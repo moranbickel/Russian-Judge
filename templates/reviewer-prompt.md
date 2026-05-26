@@ -137,11 +137,11 @@ I will now send you the work product.
 
 ---
 
-## Dual RJ — System Message
+## Dual RJ — how to run it
 
-For work products that touch both code and domain content. **Use this priming for two separate sessions** — one Code-primed, one Domain-primed — and run them independently. Do not combine the two reviewers in a single session; the modalities will contaminate each other.
+Dual RJ has **no separate system message by design** — it *is* the Code and Domain primings above, run as two independent sessions on the same work product (one Code-primed, one Domain-primed). Do not combine them in a single session; the modalities contaminate each other.
 
-Then evaluate both verdicts against the floor independently. The work product passes only if both modalities pass.
+Send the same work product to both sessions. Evaluate each verdict against the floor independently — the work product passes only if **both** modalities pass. If either returns a Critical or Important, or scores below 9.0, the work goes back for revision and both modalities re-run at R2.
 
 ---
 
