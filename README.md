@@ -158,14 +158,14 @@ The name is irreverent on purpose. The protocol is serious.
 
 ## Related
 
-This is the first of six methodology pieces from building ORCA:
+This is one of a series of methodology pieces from building ORCA:
 
 - **Russian Judge** — *this repo.* Adversarial AI review with structured verdicts.
 - **[Three-Body Protocol](https://github.com/moranbickel/three-body-protocol)** — coordination across sessions in time.
 - **[Peer-Worker Convergence](https://github.com/moranbickel/peer-worker-convergence)** — coordination across sessions in parallel.
-- **CSAE** — attestation chains for AI-generated commits. *(coming)*
-- **Engineering Rules** — rules-from-failures collection. *(coming)*
-- **STATUS_NOW Discipline** — the 50-line living handoff in depth. *(coming)*
+- **[CSAE](https://github.com/moranbickel/csae)** — attestation chains for AI-generated commits.
+
+More pieces as they're written.
 
 ---
 
