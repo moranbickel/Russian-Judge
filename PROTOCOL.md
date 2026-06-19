@@ -1,6 +1,6 @@
 # Russian Judge — Protocol Specification
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Stable
 **Author:** Moran Bickel
 
@@ -56,6 +56,11 @@ The reviewer must not return findings as an undifferentiated "Issue" or "Concern
 **§3.5 Finding ID.**
 Each finding receives an identifier of the form `<class-letter>-<index>`: `C-1`, `I-1`, `I-2`, `M-1`, etc. IDs are referenced when the Author addresses findings in R2.
 
+**§3.6 Note (N) — the no-impact observation.**
+A Note is an observation the reviewer wants on the record that is *not a defect in the work product under review*: an out-of-scope remark, a no-action recommendation ("nothing to fix here, but worth knowing"), a sibling-class observation, a future-improvement suggestion. Notes carry **no score impact and no floor impact** — they are not findings. They use the ID form `N-1`, `N-2`, etc.
+
+The Note class exists to give the reviewer somewhere to put a true observation that is not a Minor. Without it, a conscientious reviewer who has nothing to fix but something to say is pushed to file the remark as a Minor — and a Minor, under the stricter floor variants (§4.5), can block. The asymmetry is real: a reviewer whose own narrative says "no fix required" or "out of scope for this review" but who files the remark as a Minor has produced a verdict that fails its own floor for a non-defect. When a finding's narrative reads as a Note, classify it as a Note. (This is what §10.8 — the calibration-loop tactic — turns on.)
+
 ---
 
 ## §4. The Score
@@ -80,6 +85,23 @@ The floor is a contract over the *pass decision*: given the findings as classifi
 
 **§4.3 No score inflation.**
 The reviewer is primed to score conservatively. A reviewer that defaults to 9+ on every submission is broken. The operator should periodically audit verdicts for distribution; if scores cluster above 9.0 without corresponding empirical quality, re-prime the reviewer.
+
+**§4.4 The pass-assertion invariant (machine-checkable floor).**
+When a verdict carries an explicit pass flag — i.e. the reviewer states `pass_asserted: true|false` in a stored or programmatic verdict (§13) rather than just narrating a `PASS`/`REVISE`/`REWORK` value — that flag MUST equal the floor formula:
+
+```
+pass_asserted  ==  (score >= 9.0)  AND  (critical + important + minor == 0)
+```
+
+A `pass_asserted: true` with any non-zero blocking-class count is a **malformed verdict**, not a pass. This is the machine-checkable form of the §10.5 anti-pattern (score-only floor): a reviewer that asserts PASS off the score alone, ignoring the finding counts, is caught by recomputing the formula from the counts and rejecting the mismatch. Validators should always recompute rather than trust the asserted flag — the counts are the ground truth; the assertion is the claim. (Whether `minor` is in the conjunction depends on the floor variant in force — see §4.5.)
+
+**§4.5 Floor variants.**
+The default floor is `score >= 9.0 AND 0 C AND 0 I` (§4.2). Two stricter variants are sometimes warranted, set per operator policy, not per verdict:
+
+- **Minor-inclusive floor:** `score >= 9.0 AND 0 C AND 0 I AND 0 M`. Used where even cosmetic residue is unacceptable before a change is recorded as clean — e.g. a regulated audit trail. Under this variant a single un-addressed Minor blocks, which is precisely why the Note class (§3.6) matters: a no-action observation filed as a Minor would otherwise block a clean work product for a non-defect.
+- **Relaxed-Minor floor:** `score >= 8.5 AND 0 C AND 0 I`, with one well-grounded Minor acceptable as a documented deferral. Used for low-stakes or exploratory work where the cost of an extra round outweighs the residual Minor.
+
+The variant is an operator decision, fixed for a class of work and applied uniformly — not a per-verdict negotiation. The pass-assertion invariant (§4.4) is computed against whichever variant is in force.
 
 ---
 
@@ -229,6 +251,11 @@ Author argues with the reviewer that an Important finding is actually Minor. The
 **§10.7 Single-modality on dual-modality work.**
 Running only Code RJ on a change that also affects domain content (or vice versa). The other modality's defects are invisible to the modality that ran. Dual RJ exists for this case.
 
+**§10.8 The praise-Minor calibration loop — and the escalation tactic.**
+A specific failure mode of weaker or cheaper reviewer models: on otherwise-clean work, the reviewer manufactures a fresh non-actionable "no fix required" remark each round, files it as a *Minor* rather than a Note (§3.6), and then asserts `pass_asserted: true` anyway — violating the invariant (§4.4). Under a Minor-inclusive floor (§4.5) the non-zero Minor count blocks; re-prompting the same model to reclassify just invites the next praise-Minor next round. The fold of round N's praise-Minor produces round N+1's praise-Minor. It is a *loop*, not a convergence.
+
+The tactic that breaks it: **escalate the terminal round to a stronger model** (the cross-model dispatch of §9.4, applied as a recovery move rather than a routine triangulation). A stronger reviewer reliably classifies no-action observations as Notes — no score impact, no floor impact — and returns the clean `0/0/0` terminal verdict the work product actually warrants. The trigger is two or more consecutive rounds from the weaker model each emitting exactly one self-asserted-PASS praise-Minor. This is model-agnostic: it is the weaker-reviewer limitation (§11) surfacing as a calibration artifact, and the escape hatch is the same one §9.4 already names.
+
 ---
 
 ## §11. Limitations
@@ -243,7 +270,32 @@ The protocol does not solve:
 
 ## §12. Versioning
 
-This is v1.0. Material changes to the taxonomy, the floor formula, or the round protocol produce v2.0. Refinements to priming, format, or anti-patterns produce v1.1, v1.2, etc.
+This is v1.1. Material changes to the taxonomy, the floor formula, or the round protocol produce v2.0. Refinements to priming, format, or anti-patterns produce v1.1, v1.2, etc. v1.1 added the Note class (§3.6), the pass-assertion invariant (§4.4), floor variants (§4.5), the calibration-loop escalation tactic (§10.8), and the verdict record (§13).
+
+---
+
+## §13. Verdict Records (optional)
+
+The five-field verdict of §7 (round, modality, score, findings, verdict) is sufficient for ad-hoc, single-session use: you read it, you act on it, you move on. But once verdicts are *stored* — as an audit trail, or as inputs to a programmatic pipeline — they need to be **chainable, bindable, and attributable**. A bare verdict message cannot be: it does not say which round it succeeds, which exact change it reviewed, or which reviewer produced it. The verdict record is the optional metadata that closes those gaps. It wraps the core verdict; it does not change it.
+
+**§13.1 The record fields.**
+
+| Field | Purpose |
+|---|---|
+| `verdict_id` | A stable, unique identifier for this verdict within the store. The anchor that the next round points back to. |
+| `predecessor_verdict` | The `verdict_id` of the preceding round (null for R1). Chains the round protocol (§5) into a verifiable lineage instead of relying on round numbers alone. |
+| `review_scope` | What the reviewer actually examined, per modality (a `code_dimensions` list and a `domain_dimensions` list, each present, the off-modality one empty). Makes a PASS honest: it certifies *this scope*, not adjacent files or downstream consumers (§4.2.1). |
+| `covers_range` | The exact change the verdict is bound to — a commit range, a revision id, a content hash. A verdict authored against one state does not certify a later state; the binding is what lets tooling gate the *shipped* change rather than a stale one. |
+| `reviewer_model` | Which model (or human) produced the verdict. Without it, cross-model dispatch (§9.4) is not auditable — you cannot say which reviewer caught a finding if you did not record who reviewed. |
+| `review_round` | The round identifier, mirrored into the record so the stored verdict is self-describing. |
+| `pass_asserted` | The reviewer's own pass claim, governed by the §4.4 invariant — it must equal the floor formula recomputed from the counts. |
+| `issued_at` | When the verdict was issued (ISO 8601 UTC recommended). Orders the lineage and supports the drift auditing of §4.3 / §10.2. |
+
+**§13.2 Why each field earns its place.**
+Every record field defends a property the bare verdict cannot. `review_scope` + `covers_range` are the verdict-coverage honesty the §4.2.1 gap demands made explicit: a stored PASS that does not say *what it covered* and *which state it covered* will eventually be cited as certifying more than it did. `predecessor_verdict` + `verdict_id` make the round protocol auditable as a chain rather than a guess from filenames. `reviewer_model` is the precondition for any claim about cross-model dispatch having happened. `pass_asserted` is the field the §4.4 invariant is computed against. None of this is required for the protocol to *run* — it is required for the protocol to leave a record you can trust later.
+
+**§13.3 What stays out of the protocol.**
+The record schema is intentionally minimal. Storage format, identity scheme (UUID vs. content hash vs. monotonic counter), how `covers_range` is expressed (commit SHAs, revision ids, hashes), and how the store is indexed are implementation choices, not protocol. The schema in [`schemas/verdict.schema.json`](./schemas/verdict.schema.json) carries the record as an optional `record` object so a programmatic pipeline can validate it, while a single-session user can ignore it entirely.
 
 ---
 

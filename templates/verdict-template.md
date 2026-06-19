@@ -26,8 +26,13 @@ IMPORTANT (I):
 MINOR (M):
   - M-1: Variable name `tmp_calc` is uninformative. Suggest `subtotal`.
 
+NOTES (N):
+  None
+
 VERDICT: REVISE
 ```
+
+The `NOTES (N)` slot is optional and may be omitted entirely when the reviewer has no non-defect observations. When present, it holds remarks with no score or floor impact (PROTOCOL.md §3.6).
 
 ### Pass example
 
@@ -45,6 +50,10 @@ IMPORTANT (I):
 
 MINOR (M):
   - M-1: Comment on line 47 is now stale and should be updated.
+
+NOTES (N):
+  - N-1: The module would benefit from a property-based test suite, but
+         that is out of scope for this change.
 
 VERDICT: PASS
 ```
@@ -104,11 +113,51 @@ A formal JSON Schema for the verdict shape lives at [`schemas/verdict.schema.jso
         "id": "M-1",
         "description": "Variable name `tmp_calc` is uninformative. Suggest `subtotal`."
       }
-    ]
+    ],
+    "notes": []
   },
   "verdict": "REVISE"
 }
 ```
+
+### JSON form with a verdict record
+
+When verdicts are stored or piped (not just read once), attach the optional `record` block (PROTOCOL.md §13). It makes the verdict chainable, bindable, and attributable. A single-session user can omit it entirely; a programmatic pipeline carries it.
+
+```json
+{
+  "round": "R2",
+  "modality": "code",
+  "score": 9.4,
+  "findings": {
+    "critical": [],
+    "important": [],
+    "minor": [],
+    "notes": [
+      {
+        "id": "N-1",
+        "description": "The GC is opportunistic and accumulates memory while idle — worth a docstring note, but out of scope for this change."
+      }
+    ]
+  },
+  "verdict": "PASS",
+  "record": {
+    "verdict_id": "9f2c1a7e-...",
+    "predecessor_verdict": "1b4d8e02-...",
+    "review_scope": {
+      "code_dimensions": ["edge cases", "concurrency", "test coverage"],
+      "domain_dimensions": []
+    },
+    "covers_range": "a1b2c3d..e4f5a6b",
+    "reviewer_model": "<reviewer model id>",
+    "review_round": "R2",
+    "pass_asserted": true,
+    "issued_at": "2026-06-19T100000Z"
+  }
+}
+```
+
+In this example the no-action remark that the reviewer wanted on the record is filed as a **Note** (`N-1`), not a Minor — so it carries no floor impact, and `pass_asserted: true` is consistent with a `0/0/0` blocking-class count. Filing the same remark as a Minor would, under a Minor-inclusive floor, have made `pass_asserted: true` a malformed verdict (see PROTOCOL.md §4.4).
 
 ### Verdict values
 
@@ -128,6 +177,9 @@ The verdict value is computed from the score and finding counts, not stated inde
 - **Finding `id`** — `<class-letter>-<index>`, indices start at 1, monotonically increasing within class.
 - **Finding `description`** — single sentence, ends with a period.
 - **Finding `impact`** — single sentence, required for Critical and Important, optional for Minor.
+- **`notes`** — optional. Observations with no score or floor impact (out-of-scope, no-action, sibling-class, future-improvement), IDs `N-1`, `N-2`. Per PROTOCOL.md §3.6. A remark whose own wording says "no fix required" belongs here, not in `minor`.
+- **`record`** — optional. The auditable-record metadata for stored / piped verdicts (PROTOCOL.md §13): `verdict_id`, `predecessor_verdict`, `review_scope`, `covers_range`, `reviewer_model`, `review_round`, `pass_asserted`, `issued_at`. Omit for ad-hoc single-session use.
+- **`record.pass_asserted`** — when present, MUST equal `(score >= 9.0) AND (critical + important + minor == 0)` (the floor variant in force; PROTOCOL.md §4.4). Validators recompute and reject a mismatch.
 - **Empty classes** — represented as `None` (markdown) or `[]` (JSON), never omitted.
 
 ---
@@ -138,3 +190,5 @@ The verdict value is computed from the score and finding counts, not stated inde
 - **Findings without IDs.** Cannot be referenced in R2 dispatches.
 - **Vibe verdicts.** A score with no findings list. The format requires the list, even if empty.
 - **Verdict-score inconsistency.** A `PASS` with Critical findings is malformed. Validators should reject.
+- **Pass-assertion mismatch.** A stored verdict with `record.pass_asserted: true` and a non-zero blocking-class count. The floor invariant (PROTOCOL.md §4.4) is recomputed from the counts; the assertion is the claim, the counts are the ground truth.
+- **No-action remark filed as Minor.** A reviewer with nothing to fix but something to say files it as a Minor, which can block under a Minor-inclusive floor. The Note class (`N-`) is where it belongs.
