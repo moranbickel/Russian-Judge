@@ -30,8 +30,15 @@ Every finding must be classified into one of three classes:
 - MINOR (M): real but cosmetic or low-impact — naming, phrasing,
   ordering, formatting.
 
+If you have an observation that is NOT a defect in this work product —
+out of scope, a no-action "worth knowing" remark, a future-improvement
+suggestion — file it as a NOTE (N), not a Minor. Notes carry no score
+or floor impact. If your own wording for a remark is "no fix required
+here," it is a Note.
+
 If you are uncertain about classification, classify upward (toward
-Critical), not downward.
+Critical), not downward — but a genuine non-defect is a Note, not a
+defensive Minor.
 
 Return a single score from 0.0 to 10.0 with one decimal of precision.
 Anchored bands:
@@ -62,6 +69,10 @@ IMPORTANT (I):
 
 MINOR (M):
   - M-1: <description>.
+  (or "None")
+
+NOTES (N):
+  - N-1: <observation, no score/floor impact>.
   (or "None")
 
 VERDICT: PASS | REVISE | REWORK
@@ -105,7 +116,13 @@ Every finding must be classified:
 - MINOR (M): cosmetic or stylistic — phrasing, ordering, register
   drift that does not affect substance.
 
-If uncertain, classify upward.
+If you have an observation that is NOT a substantive defect — out of
+scope, a no-action remark, a suggestion for future work — file it as a
+NOTE (N), not a Minor. Notes carry no score or floor impact. "No change
+required here, but worth noting" is a Note.
+
+If uncertain, classify upward — but a genuine non-defect is a Note, not
+a defensive Minor.
 
 Return a score from 0.0 to 10.0, one decimal. Bands:
 
@@ -134,6 +151,10 @@ IMPORTANT (I):
 
 MINOR (M):
   - M-1: <description>.
+  (or "None")
+
+NOTES (N):
+  - N-1: <observation, no score/floor impact>.
   (or "None")
 
 VERDICT: PASS | REVISE | REWORK
@@ -181,3 +202,7 @@ You may surface new findings if my changes introduced any.
 **Why mandate the format.** Structured output is what makes the verdict actionable. A reviewer that returns a paragraph of feedback has produced a vibe, not a verdict.
 
 **Why classify upward when uncertain.** A Critical finding misclassified as Important might ship. An Important finding misclassified as Critical only delays shipping by one round. The asymmetry favors classifying up.
+
+**Why the Note class.** Without somewhere to put a true-but-non-defect observation, a conscientious reviewer files it as a Minor — and under a Minor-inclusive floor (PROTOCOL.md §4.5) a Minor blocks. Notes give the reviewer a place to say "no fix required here, but worth knowing" without manufacturing a blocking finding on clean work. This is the single most common calibration drift in weaker reviewers (PROTOCOL.md §10.8): a fresh praise-Minor each round, self-asserted as PASS anyway. If re-prompting the same model to reclassify just produces the next praise-Minor, escalate the terminal round to a stronger model — it classifies the remark as a Note and returns the clean verdict the work warrants (this is cross-model dispatch, PROTOCOL.md §9.4, used as a recovery move).
+
+**A note on programmatic / async dispatch.** If you wire RJ into a pipeline, the verdict record (PROTOCOL.md §13) is what makes a stored verdict auditable — chain it by `predecessor_verdict`, bind it to `covers_range`, attribute it by `reviewer_model`, and recompute `pass_asserted` against the floor (§4.4) rather than trusting it. One operational gotcha: when a dispatch is asynchronous (the reviewer runs in the background and the verdict arrives later), any "did the reviewer return a verdict yet?" check that fires at *launch* will see nothing — the verdict does not exist until the reviewer finishes. Gate on the verdict's arrival, not on the dispatch call returning. A synchronous dispatch has no such gap.
