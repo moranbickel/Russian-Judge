@@ -1,45 +1,45 @@
 # Russian Judge
 
-**A protocol for adversarial AI review.** A reviewer model is given an explicitly adversarial role and returns a structured verdict: a score from 0 to 10, plus a list of findings classified as Critical, Important, or Minor. Pass floor: **≥ 9.0 with zero Critical or Important findings**. Anything else means another round.
+**A protocol for adversarial AI review.** You give a reviewer model an openly adversarial role, and it returns a structured verdict: a score from 0 to 10, plus a list of findings, each marked Critical, Important, or Minor. The pass floor is **≥ 9.0 with zero Critical or Important findings**. Anything short of that means another round.
 
-I've used this on production code, formal specs, legal drafts, and prose. It's one of the highest-leverage protocols I built while developing ORCA, a production legal-AI system. This repo is the public version.
+I've used it on production code, formal specs, legal drafts, and prose. It's one of the highest-leverage protocols I built while developing ORCA, a production legal-AI system. This repo is the public version.
 
 ---
 
 ## The failure it solves
 
-I shipped a fix once that passed an LLM review with an 8.5/10. Three days later it broke production. The reviewer's comment had been "looks good — minor stylistic suggestions below." That was the moment I realized:
+I once shipped a fix that passed an LLM review with an 8.5/10. Three days later it broke production. The reviewer's comment had been "looks good, minor stylistic suggestions below." That was the moment it clicked:
 
-**An unstructured 8.5/10 from an LLM means nothing.** It doesn't tell you whether the issues are blocking or cosmetic. It doesn't tell you whether to ship. It doesn't tell the author what to fix first. It's a vibe wearing a number.
+**An unstructured 8.5/10 from an LLM tells you almost nothing.** It doesn't say whether the problems are blocking or cosmetic. It doesn't say whether to ship. It doesn't tell the author what to fix first. It's a feeling dressed up as a number.
 
-Russian Judge fixes this with three pieces of structure:
+Russian Judge replaces the feeling with three pieces of structure:
 
-1. **An adversarial role** for the reviewer. Not "give me feedback" — *try to find what's wrong*.
-2. **A defect taxonomy** with three classes: Critical, Important, Minor. Every finding has a class. No class, no finding.
-3. **A pass floor** that's a function of both the score and the findings: **≥ 9.0 AND zero C/I**. A 9.5 with one Critical finding doesn't pass. A 9.0 with three Minors does.
+1. **An adversarial role** for the reviewer. Not "give me feedback," but "try to find what's wrong."
+2. **A defect taxonomy** with three classes: Critical, Important, Minor. Every finding gets a class, or it isn't a finding.
+3. **A pass floor** that depends on both the score and the findings: **≥ 9.0 AND zero C/I**. A 9.5 with one Critical finding does not pass. A 9.0 with three Minors does.
 
-That last piece is the one that matters most. The score alone is a vibe. The score combined with the floor is a contract — a contract over the *decision* (given the findings as classified), not a guarantee the reviewer classified them correctly. That second gap is real, and the next section is about it.
+The third piece matters most. A score on its own is still just a feeling. A score plus the floor is a contract, and the contract is over the *decision* (given how the findings were classified), not a promise that the reviewer classified them correctly. That second gap is real, and the next section is about it.
 
 ---
 
 ## What RJ is not
 
-RJ is **not** a claim that LLM reviewers are reliably correct. The reviewer can still miss defects, hallucinate findings, or misclassify severity. Recent research on LLM-as-judge systems documents real failure modes — bias, prompt-injection vulnerability, score drift (see [Prior art](#prior-art) below).
+RJ is **not** a claim that LLM reviewers are reliably correct. The reviewer can still miss defects, invent findings, or get the severity wrong. Recent research on LLM-as-judge systems documents real failure modes: bias, prompt-injection weakness, score drift (see [Prior art](#prior-art) below).
 
-The protocol's value is not oracle-level correctness. Its value is forcing every review into:
+The protocol's value isn't oracle-level correctness. Its value is forcing every review into:
 
 1. a severity taxonomy,
 2. a pass/fail contract,
 3. a bounded review loop,
-4. explicit human-operator responsibility.
+4. clear human-operator responsibility.
 
-RJ is a structured adversarial review *loop for human-operated workflows*. The Operator owns the decision to ship; the reviewer owns the structured signal. If you treat the verdict as oracle, you're holding the protocol wrong.
+RJ is a structured adversarial review *loop for human-operated workflows*. The Operator owns the decision to ship; the reviewer owns the structured signal. Treat the verdict as an oracle and you're using the protocol against its own design.
 
 ---
 
-## RJ vs alternatives
+## RJ vs. alternatives
 
-Three common approaches to AI-assisted review, side by side. Use the one that fits your work product and operating constraints.
+Three common approaches to AI-assisted review, side by side. Use the one that fits your work and your constraints.
 
 | Dimension | Free-form LLM review | Russian Judge | Human review |
 |---|---|---|---|
@@ -53,15 +53,15 @@ Three common approaches to AI-assisted review, side by side. Use the one that fi
 | Audit trail | None | Verdict format is the record | Variable, often informal |
 | Best for | Quick sanity checks, exploratory work | Pre-merge gate on every change that can introduce a new failure mode | Architecture, judgment calls, regulated-domain decisions |
 
-RJ doesn't replace human review — it makes the cases where humans aren't practical (every commit, late-night, weekends, every paragraph of a draft) reviewed at all, with structured output a human can audit later.
+RJ doesn't replace human review. It covers the cases where human review isn't practical (every commit, late nights, weekends, every paragraph of a draft), and it leaves a structured record a human can audit later.
 
 ---
 
 ## Prior art
 
-The academic cousin of this protocol is **LLM-as-judge**: using a language model to score another model's output. Zheng et al. (2023) formalized it for evaluating chat assistants and, in the same work, named its failure modes — position bias, verbosity bias, self-enhancement bias, and weak reasoning on hard problems.[^mtbench] Holistic benchmarks like HELM evaluate models across many scenarios and metrics.[^helm] But that literature is about *ranking and evaluating models*; Russian Judge is about *gating one work product before it ships*. Same mechanism (an LLM produces a structured judgment), different goal.
+The academic cousin of this protocol is **LLM-as-judge**: using a language model to score another model's output. Zheng et al. (2023) formalized it for evaluating chat assistants and, in the same paper, named its failure modes: position bias, verbosity bias, self-enhancement bias, and weak reasoning on hard problems.[^mtbench] Holistic benchmarks like HELM evaluate models across many scenarios and metrics.[^helm] But that work is about *ranking and evaluating models*. Russian Judge is about *gating one piece of work before it ships*. Same mechanism (an LLM produces a structured judgment), different goal.
 
-The distinction that matters is what RJ refuses to inherit. The biases Zheng et al. document are exactly why RJ does not treat the verdict as an oracle: it primes the reviewer adversarially to fight the sycophancy and self-enhancement tendency, it puts the ship decision on the human Operator rather than the model, and it recommends cross-model dispatch for high-stakes work so no single model's bias is load-bearing. RJ is the LLM-as-judge idea wrapped in a contract and a loop — with the known failure modes named and bracketed, not assumed away.
+What sets RJ apart is what it refuses to inherit. The biases Zheng et al. document are exactly why RJ never treats the verdict as an oracle. It primes the reviewer adversarially to push back against sycophancy and self-flattery, it puts the ship decision on the human Operator rather than the model, and it recommends sending high-stakes work to a second model so no single model's bias is load-bearing. RJ is the LLM-as-judge idea wrapped in a contract and a loop, with the known failure modes named and contained rather than wished away.
 
 [^mtbench]: Zheng et al., *Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena*, NeurIPS 2023. [arXiv:2306.05685](https://arxiv.org/abs/2306.05685).
 [^helm]: Liang et al., *Holistic Evaluation of Language Models (HELM)*, 2022. [arXiv:2211.09110](https://arxiv.org/abs/2211.09110).
@@ -95,15 +95,15 @@ The distinction that matters is what RJ refuses to inherit. The biases Zheng et 
 
 Three review modalities, depending on the work:
 
-- **Code RJ** — for code changes. Reviewer is primed to look for bugs, regressions, edge cases, missing tests.
-- **Domain RJ** — for domain content (in my case: legal text). Reviewer is primed for substantive correctness, not style.
-- **Dual RJ** — both, run independently, for changes that touch both code and domain content. The dual modality has caught defects in my work that single-modality review missed three rounds in a row.
+- **Code RJ**, for code changes. The reviewer is primed to look for bugs, regressions, edge cases, and missing tests.
+- **Domain RJ**, for domain content (in my case, legal text). The reviewer is primed for substantive correctness, not style.
+- **Dual RJ**, both run independently, for changes that touch both code and domain content. The dual modality has caught defects in my work that single-modality review missed three rounds running.
 
 ---
 
 ## A worked example
 
-Suppose I've just refactored a function that calculates damages. I send it to RJ.
+Say I've just refactored a function that calculates damages. I send it to RJ.
 
 **R1 verdict:**
 ```
@@ -120,7 +120,7 @@ Minor: 1
   - M-1: Variable name `tmp_calc` is uninformative. Suggest `subtotal`.
 ```
 
-I don't argue with the score. 8.0 with two Importants means another round. I add an input guard for negatives, restore the rounding tests against the new implementation, fix the variable name, and dispatch R2.
+I don't argue with the score. An 8.0 with two Importants means another round. I add an input guard for negatives, restore the rounding tests against the new implementation, fix the variable name, and dispatch R2.
 
 **R2 verdict:**
 ```
@@ -131,39 +131,39 @@ Minor: 0
 PASS — ship it.
 ```
 
-That's the shape. The score moved 1.4 points, but the meaningful change wasn't the score — it was the C/I count going to zero.
+That's the shape. The score moved 1.4 points, but the change that mattered was the C/I count going to zero.
 
 ---
 
-## When to use it — and when not to
+## When to use it, and when not to
 
-RJ is the right tool when a change can introduce a new failure mode. Code that touches a contract between modules. A spec that downstream code will consume. A legal claim where the wrong word is grounds for sanctions. Anything where the cost of a missed defect outweighs the cost of an extra review cycle.
+RJ is the right tool when a change can introduce a new failure mode: code that touches a contract between modules, a spec that downstream code will consume, a legal claim where the wrong word is grounds for sanctions. Anything where the cost of a missed defect is larger than the cost of one more review cycle.
 
-RJ is the wrong tool for changes that *cannot* introduce a new failure mode. Comment edits. Variable renames inside a single function. Documentation typos. Running RJ on these wastes time and trains you to ignore its output.
+RJ is the wrong tool for changes that *can't* introduce a new failure mode: comment edits, variable renames inside a single function, documentation typos. Running RJ on those wastes time and teaches you to ignore its output.
 
-The gate isn't "is the change small?" — small changes can break things in big ways. The gate is "**can this introduce a new failure mode?**" If yes, RJ. If no, ship.
+The question isn't "is the change small?" Small changes can break things in big ways. The question is "**can this introduce a new failure mode?**" If yes, run RJ. If no, ship.
 
-There's also a discipline of stopping. After R2 — sometimes R3 — you hit diminishing returns. The reviewer starts surfacing things that are stylistic preferences masquerading as findings. The protocol assumes you'll trust the floor: when the score is ≥ 9.0 and C/I are zero, you ship. You don't run a fourth round looking for reassurance.
+There's also a discipline of stopping. After R2, sometimes R3, you hit diminishing returns: the reviewer starts surfacing stylistic preferences dressed up as findings. The protocol assumes you'll trust the floor. Once the score is ≥ 9.0 and C/I are zero, you ship. You don't run a fourth round looking for reassurance.
 
 ---
 
 ## Adopt this in 15 minutes
 
 1. **Copy the reviewer prompt** from [`templates/reviewer-prompt.md`](./templates/reviewer-prompt.md). Paste it as the system message of a new chat with whichever model you use for review (I use Claude for most work and GPT for cross-checks).
-2. **Adopt the verdict format** in [`templates/verdict-template.md`](./templates/verdict-template.md). Ask the reviewer to return verdicts in that exact shape. Score, C/I/M with one-line each, finding IDs.
-3. **Use the pre-check gate** in [`templates/pre-check-gate.md`](./templates/pre-check-gate.md) before invoking RJ. It's a four-question test that takes thirty seconds and saves you from running RJ on changes that don't need it.
+2. **Adopt the verdict format** in [`templates/verdict-template.md`](./templates/verdict-template.md). Ask the reviewer to return verdicts in that exact shape: score, C/I/M with one line each, finding IDs.
+3. **Use the pre-check gate** in [`templates/pre-check-gate.md`](./templates/pre-check-gate.md) before invoking RJ. It's a four-question test that takes thirty seconds and keeps you from running RJ on changes that don't need it.
 
 The floor is **≥ 9.0 AND 0 C/I**. Don't ship below it. Don't keep reviewing above it.
 
-For the formal protocol — round structure, modality definitions, verdict schema, anti-patterns — see [`PROTOCOL.md`](./PROTOCOL.md). For a complete end-to-end R1→R2 cycle on a synthetic code change, see [`examples/r1-r2-walkthrough.md`](./examples/r1-r2-walkthrough.md). For the harder case — a finding the author believes is a false positive — see [`examples/disputed-finding-walkthrough.md`](./examples/disputed-finding-walkthrough.md).
+For the formal protocol (round structure, modality definitions, verdict schema, anti-patterns), see [`PROTOCOL.md`](./PROTOCOL.md). For a complete R1→R2 cycle on a synthetic code change, see [`examples/r1-r2-walkthrough.md`](./examples/r1-r2-walkthrough.md). For the harder case, a finding the author believes is a false positive, see [`examples/disputed-finding-walkthrough.md`](./examples/disputed-finding-walkthrough.md).
 
 ---
 
 ## Why "Russian Judge"
 
-Figure-skating commentary trope: the Russian judge always gives the lowest scores. The name captures the spirit — find what's wrong, don't validate what looks right. A reviewer who returns a 9.8 on every submission is broken. A reviewer who finds two Important issues on a clean piece of work has done their job.
+It's a figure-skating commentary trope: the Russian judge always gives the lowest scores. The name captures the spirit of the thing. Find what's wrong; don't rubber-stamp what looks right. A reviewer who returns a 9.8 on every submission is broken. A reviewer who finds two Important issues on a clean piece of work is doing its job.
 
-The name is irreverent on purpose. The protocol is serious.
+The name is a joke. The protocol isn't.
 
 ---
 
@@ -183,7 +183,7 @@ More pieces as they're written.
 
 ## About
 
-This protocol was developed for use in production on ORCA (Orchestrated Reasoning for Civil Action), an AI legal reasoning system for Israeli civil litigation. The system is closed-source; the methodology that produced it is open. Maintained by [Moran Bickel](https://github.com/moranbickel), Israeli litigator and ORCA's founder.
+This protocol was developed for use in production on ORCA (Orchestrated Reasoning for Civil Action), an AI legal reasoning system for Israeli civil litigation. The system is closed-source; the methodology behind it is open. Maintained by [Moran Bickel](https://github.com/moranbickel), Israeli litigator and ORCA's founder.
 
 ---
 
@@ -192,6 +192,6 @@ This protocol was developed for use in production on ORCA (Orchestrated Reasonin
 - Prose: [CC BY 4.0](./LICENSE-CC-BY-4.0)
 - Templates and code: [MIT](./LICENSE-MIT)
 
-If you adopt or build on this protocol, attribution requested but not required for templates. For prose, attribution is required under CC BY 4.0.
+If you adopt or build on this protocol, attribution is requested but not required for templates. For prose, attribution is required under CC BY 4.0.
 
 — Moran Bickel
