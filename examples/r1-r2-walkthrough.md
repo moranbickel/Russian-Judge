@@ -1,6 +1,6 @@
 # Worked Example: R1 → R2
 
-A complete end-to-end Russian Judge cycle on a small, realistic code change. Synthetic — chosen to illustrate the protocol's mechanics rather than represent a real production review.
+A complete end-to-end Russian Judge cycle on a small, realistic code change. Synthetic, chosen to illustrate the protocol's mechanics rather than represent a real production review.
 
 The work product is a Python rate-limiter middleware function. The change adds per-IP rate limiting to an existing API. We dispatch Code RJ, see what R1 catches, address findings, and re-dispatch.
 
@@ -198,14 +198,14 @@ MINOR (M):
 VERDICT: PASS
 ```
 
-Author ships. Optionally addresses M-3 in a follow-up — non-blocking.
+Author ships. Optionally addresses M-3 in a follow-up; it's non-blocking.
 
 ---
 
 ## What to notice
 
-- **The score moved 1.7 points.** That's not the meaningful number. The meaningful number is the C count going to zero and the I count going to zero. Score is the reviewer's vibe; the floor is the contract.
-- **R1 had a Critical finding (C-1) the author hadn't seen.** The author had self-tested locally with one IP and one process — couldn't have surfaced the unbounded-growth or the concurrency issue from local testing alone. This is the kind of defect adversarial review is shaped for.
+- **The score moved 1.7 points.** That's not the meaningful number. The meaningful number is the C count going to zero and the I count going to zero. The score is the reviewer's opinion; the floor is the contract.
+- **R1 had a Critical finding (C-1) the author hadn't seen.** The author had self-tested locally with one IP and one process, and couldn't have surfaced the unbounded-growth or the concurrency issue from local testing alone. This is the kind of defect adversarial review is shaped for.
 - **R2 surfaced one new finding (M-3).** This is normal. Fixes can introduce new edges. The verdict format requires the reviewer to flag them; the floor decides whether they block.
 - **The author deferred M-1 explicitly with rationale.** The protocol allows this for non-blocking findings. The R2 verdict acknowledges the deferral and counts it correctly.
 - **No round 3.** Pass floor met. Halt. Per [PROTOCOL.md §10.3](../PROTOCOL.md), running R3 to chase a higher score is an anti-pattern.
@@ -216,8 +216,8 @@ Author ships. Optionally addresses M-3 in a follow-up — non-blocking.
 
 - Domain RJ on prose or specs (the same shape applies; the priming differs).
 - Dual RJ on a change that touches both code and domain content (run two independent sessions).
-- Cross-model dispatch (running R2 on a different model from R1 — sometimes catches what R1 missed).
-- The pre-check gate decision (this change clearly invokes RJ — touches a contract, introduces a new failure mode).
-- A disputed finding — where the author believes the reviewer is wrong. That's the protocol's hardest judgment call; it has its own walkthrough: [`disputed-finding-walkthrough.md`](./disputed-finding-walkthrough.md).
+- Cross-model dispatch (running R2 on a different model from R1, which sometimes catches what R1 missed).
+- The pre-check gate decision (this change clearly invokes RJ: it touches a contract and introduces a new failure mode).
+- A disputed finding, where the author believes the reviewer is wrong. That's the protocol's hardest judgment call; it has its own walkthrough: [`disputed-finding-walkthrough.md`](./disputed-finding-walkthrough.md).
 
 For those, see [PROTOCOL.md](../PROTOCOL.md) §9 (Modalities) and [`templates/pre-check-gate.md`](../templates/pre-check-gate.md).
