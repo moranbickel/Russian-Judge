@@ -136,7 +136,7 @@ When verdicts are stored or piped (not just read once), attach the optional `rec
     "notes": [
       {
         "id": "N-1",
-        "description": "The GC is opportunistic and accumulates memory while idle — worth a docstring note, but out of scope for this change."
+        "description": "The GC is opportunistic and accumulates memory while idle - worth a docstring note, but out of scope for this change."
       }
     ]
   },
@@ -157,13 +157,13 @@ When verdicts are stored or piped (not just read once), attach the optional `rec
 }
 ```
 
-In this example the no-action remark that the reviewer wanted on the record is filed as a **Note** (`N-1`), not a Minor — so it carries no floor impact, and `pass_asserted: true` is consistent with a `0/0/0` blocking-class count. Filing the same remark as a Minor would, under a Minor-inclusive floor, have made `pass_asserted: true` a malformed verdict (see PROTOCOL.md §4.4).
+In this example the no-action remark that the reviewer wanted on the record is filed as a **Note** (`N-1`), not a Minor - so it carries no floor impact, and `pass_asserted: true` is consistent with a `0/0/0` blocking-class count. Filing the same remark as a Minor would, under a Minor-inclusive floor, have made `pass_asserted: true` a malformed verdict (see PROTOCOL.md §4.4).
 
 ### Verdict values
 
-- `PASS` — `score >= 9.0 AND len(critical) == 0 AND len(important) == 0`
-- `REVISE` — below the floor but `score >= 7.0`
-- `REWORK` — `score < 7.0`
+- `PASS` - `score >= 9.0 AND len(critical) == 0 AND len(important) == 0`
+- `REVISE` - below the floor but `score >= 7.0`
+- `REWORK` - `score < 7.0`
 
 The verdict value is computed from the score and finding counts, not stated independently. Implementations should validate consistency.
 
@@ -171,16 +171,16 @@ The verdict value is computed from the score and finding counts, not stated inde
 
 ## Field rules
 
-- **`round`** — string identifier for the review round (`R1`, `R2`, etc.). Required in both forms.
-- **`modality`** — one of `code`, `domain`, `dual`. Required in both forms.
-- **`score`** — float in `[0.0, 10.0]`, one decimal of precision.
-- **Finding `id`** — `<class-letter>-<index>`, indices start at 1, monotonically increasing within class.
-- **Finding `description`** — single sentence, ends with a period.
-- **Finding `impact`** — single sentence, required for Critical and Important, optional for Minor.
-- **`notes`** — optional. Observations with no score or floor impact (out-of-scope, no-action, sibling-class, future-improvement), IDs `N-1`, `N-2`. Per PROTOCOL.md §3.6. A remark whose own wording says "no fix required" belongs here, not in `minor`.
-- **`record`** — optional. The auditable-record metadata for stored / piped verdicts (PROTOCOL.md §13): `verdict_id`, `predecessor_verdict`, `review_scope`, `covers_range`, `reviewer_model`, `review_round`, `pass_asserted`, `issued_at`. Omit for ad-hoc single-session use.
-- **`record.pass_asserted`** — when present, MUST equal `(score >= 9.0) AND (critical + important + minor == 0)` (the floor variant in force; PROTOCOL.md §4.4). Validators recompute and reject a mismatch.
-- **Empty classes** — represented as `None` (markdown) or `[]` (JSON), never omitted.
+- **`round`** - string identifier for the review round (`R1`, `R2`, etc.). Required in both forms.
+- **`modality`** - one of `code`, `domain`, `dual`. Required in both forms.
+- **`score`** - float in `[0.0, 10.0]`, one decimal of precision.
+- **Finding `id`** - `<class-letter>-<index>`, indices start at 1, monotonically increasing within class.
+- **Finding `description`** - single sentence, ends with a period.
+- **Finding `impact`** - single sentence, required for Critical and Important, optional for Minor.
+- **`notes`** - optional. Observations with no score or floor impact (out-of-scope, no-action, sibling-class, future-improvement), IDs `N-1`, `N-2`. Per PROTOCOL.md §3.6. A remark whose own wording says "no fix required" belongs here, not in `minor`.
+- **`record`** - optional. The auditable-record metadata for stored / piped verdicts (PROTOCOL.md §13): `verdict_id`, `predecessor_verdict`, `review_scope`, `covers_range`, `reviewer_model`, `review_round`, `pass_asserted`, `issued_at`. Omit for ad-hoc single-session use.
+- **`record.pass_asserted`** - when present, MUST equal `(score >= 9.0) AND (critical + important + minor == 0)` (the floor variant in force; PROTOCOL.md §4.4). Validators recompute and reject a mismatch.
+- **Empty classes** - represented as `None` (markdown) or `[]` (JSON), never omitted.
 
 ---
 

@@ -6,7 +6,7 @@ Anticipated questions about Russian Judge.
 
 ### Why "Russian Judge"?
 
-Figure-skating commentary trope: the Russian judge always gives the lowest scores. The name captures the spirit — find what's wrong, don't validate what looks right. The name is irreverent; the protocol is serious.
+Figure-skating commentary trope: the Russian judge always gives the lowest scores. The name captures the spirit - find what's wrong, don't validate what looks right. The name is irreverent; the protocol is serious.
 
 ---
 
@@ -34,11 +34,11 @@ C/I/M is the smallest taxonomy that preserves priority signal without inviting h
 
 ### Why does the floor require zero Important findings, not just zero Critical?
 
-Because Important findings are the dangerous ones to defer. Criticals are obvious — you don't ship them. The temptation to defer is highest with Importants: "we'll address that next sprint," "the customer probably won't hit that edge case," "the test coverage gap isn't blocking."
+Because Important findings are the dangerous ones to defer. Criticals are obvious - you don't ship them. The temptation to defer is highest with Importants: "we'll address that next sprint," "the customer probably won't hit that edge case," "the test coverage gap isn't blocking."
 
 Importants are exactly where defects get smuggled into production. The floor demands them addressed because that's where the discipline matters.
 
-You can override Important findings with explicit operator authority and documented residual risk acceptance (per §5.5 of the protocol). But the default — the floor — is zero.
+You can override Important findings with explicit operator authority and documented residual risk acceptance (per §5.5 of the protocol). But the default - the floor - is zero.
 
 ---
 
@@ -77,7 +77,7 @@ If a reviewer has been used for hundreds of dispatches and its scores are no lon
 
 ### What about reviewer fatigue? Should I rotate?
 
-LLMs don't fatigue in the literal sense — each session starts fresh. But priming drift across a long session is real. The pragmatic answer: dispatch each review in a new session, with the priming pasted fresh. This is simpler than rotation schedules and gives you the same effect.
+LLMs don't fatigue in the literal sense - each session starts fresh. But priming drift across a long session is real. The pragmatic answer: dispatch each review in a new session, with the priming pasted fresh. This is simpler than rotation schedules and gives you the same effect.
 
 ---
 
@@ -118,7 +118,7 @@ The Domain RJ priming is designed for non-code work. The pass floor and round pr
 
 ### What if I disagree with the verdict?
 
-You're allowed to disagree. The protocol doesn't override your judgment. But the protocol also doesn't support arguing with the reviewer in-session — re-classification, if it happens, happens at the next round.
+You're allowed to disagree. The protocol doesn't override your judgment. But the protocol also doesn't support arguing with the reviewer in-session - re-classification, if it happens, happens at the next round.
 
 The pragmatic discipline: if you disagree often, your reviewer is wrong-shaped for your work or your priming needs adjustment. Investigate. Don't just override case-by-case; that's how the protocol degrades to vibes.
 
@@ -126,13 +126,13 @@ The pragmatic discipline: if you disagree often, your reviewer is wrong-shaped f
 
 ### How long does this take to adopt?
 
-The 15-minute version is in [`docs/how-to-adopt.md`](./how-to-adopt.md). Functional adoption — running RJ as a habit on real work — usually takes a week. Fluent use, where you stop thinking about the protocol and just use it, takes 2–4 weeks of consistent application.
+The 15-minute version is in [`docs/how-to-adopt.md`](./how-to-adopt.md). Functional adoption - running RJ as a habit on real work - usually takes a week. Fluent use, where you stop thinking about the protocol and just use it, takes 2-4 weeks of consistent application.
 
 ---
 
 ### Did you really build this for legal-AI work?
 
-Yes. ORCA is a production AI legal reasoning system for Israeli civil litigation — a decision system, not a document generator. The cost of a wrong fact, citation, or claim in a legal filing is non-trivial — sanctions, malpractice exposure, lost cases. Vague review wasn't tenable. RJ emerged from needing structure.
+Yes. ORCA is a production AI legal reasoning system for Israeli civil litigation - a decision system, not a document generator. The cost of a wrong fact, citation, or claim in a legal filing is non-trivial - sanctions, malpractice exposure, lost cases. Vague review wasn't tenable. RJ emerged from needing structure.
 
 The protocol generalized cleanly to non-legal work, which is why this repo exists. But the adversarial framing and the strict floor came from a context where defects had real cost.
 
@@ -140,7 +140,7 @@ The protocol generalized cleanly to non-legal work, which is why this repo exist
 
 ### Where's the code?
 
-The protocol is the artifact. There's no central tool to install. The templates in this repo are copy-paste — drop them into your reviewer's system message and verdict-parsing code as you see fit.
+The protocol is the artifact. There's no central tool to install. The templates in this repo are copy-paste - drop them into your reviewer's system message and verdict-parsing code as you see fit.
 
 If interest develops, a thin tool to wrap the dispatch (priming + verdict validation + halt logic) is plausible for v2. For now: copy, paste, run.
 
@@ -160,4 +160,4 @@ No. The name predates anything else and is independent of any model vendor.
 
 ### Suggestions / improvements?
 
-Open an issue on this repo. Real-use-case feedback is the most valuable input — generic suggestions less so.
+Open an issue on this repo. Real-use-case feedback is the most valuable input - generic suggestions less so.

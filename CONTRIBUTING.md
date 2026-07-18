@@ -13,7 +13,7 @@ Issues and discussions are open. Real-use-case feedback is the highest-value inp
 
 - Style edits to README, PROTOCOL.md, or docs. The voice is intentional.
 - Suggestions for new sections, modalities, or finding classes without a specific use case behind them.
-- Pull requests that change the C/I/M taxonomy or the pass-floor formula. Those are versioned changes — open an issue first.
+- Pull requests that change the C/I/M taxonomy or the pass-floor formula. Those are versioned changes - open an issue first.
 
 ## How to propose changes
 

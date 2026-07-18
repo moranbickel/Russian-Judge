@@ -10,16 +10,16 @@ The first version of my AI-collaborative review process was the obvious one: I'd
 
 The model was being agreeable. That's its default. Agreeable reviews don't catch defects.
 
-I tried the next obvious thing: ask the model to score the work. "Rate this 1–10."
+I tried the next obvious thing: ask the model to score the work. "Rate this 1-10."
 
 The scores were also agreeable. 8.5. 9.0. 8.7. The score moved a tenth or two but never delivered information. A 9.0 from this kind of reviewer was indistinguishable from an 8.5; both meant "no major flags." The number was a vibe.
 
-The 8.5/10-then-broke-production incident referenced in the README is the example I keep coming back to. The reviewer's findings — vague, unprioritized, mixed in with stylistic suggestions — had buried the defect under cosmetic noise. The score told me the work was acceptable. The structure of the review told me nothing about which of the comments mattered.
+The 8.5/10-then-broke-production incident referenced in the README is the example I keep coming back to. The reviewer's findings - vague, unprioritized, mixed in with stylistic suggestions - had buried the defect under cosmetic noise. The score told me the work was acceptable. The structure of the review told me nothing about which of the comments mattered.
 
 That was the moment I built the protocol. Three things had to change:
 
 1. **The reviewer's role.** Default LLM behavior is agreeable; I had to invert it explicitly with adversarial framing.
-2. **The defect taxonomy.** Findings without a class are unprioritized. Three classes — Critical, Important, Minor — make priority structural rather than implicit.
+2. **The defect taxonomy.** Findings without a class are unprioritized. Three classes - Critical, Important, Minor - make priority structural rather than implicit.
 3. **The pass criterion.** The score alone is a vibe. The score *combined with the finding counts* is a contract: `≥ 9.0 AND 0 Critical AND 0 Important`. That conjunction is what separates "ship" from "almost ship."
 
 That third piece is the load-bearing one. I cannot overstate this. A 9.5 with a Critical finding does not pass. A 9.0 with three Minors does. The score is the reviewer's opinion; the floor is the contract.
@@ -36,7 +36,7 @@ That third piece is the load-bearing one. I cannot overstate this. A 9.5 with a 
 
 **The unprioritized review.** "Here are some thoughts" with no signal about which thoughts are blocking. C/I/M classification forces priority into every finding.
 
-**The negotiation.** Author argues with the reviewer that an Important finding is actually Minor. The protocol doesn't support this — re-classification happens in the next round, not in dialog. (See §10.6.)
+**The negotiation.** Author argues with the reviewer that an Important finding is actually Minor. The protocol doesn't support this - re-classification happens in the next round, not in dialog. (See §10.6.)
 
 **The sunk-cost fourth round.** Author keeps requesting reviews because they want a higher score. After R2/R3, the protocol mandates halting at the floor or escalating. Continued review on the same work product extracts no further signal.
 
