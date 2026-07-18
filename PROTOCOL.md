@@ -1,4 +1,4 @@
-# Russian Judge — Protocol Specification
+# Russian Judge - Protocol Specification
 
 **Version:** 1.1
 **Status:** Stable
@@ -56,7 +56,7 @@ The reviewer must not return findings as an undifferentiated "Issue" or "Concern
 **§3.5 Finding ID.**
 Each finding receives an identifier of the form `<class-letter>-<index>`: `C-1`, `I-1`, `I-2`, `M-1`, etc. IDs are referenced when the Author addresses findings in R2.
 
-**§3.6 Note (N) — the no-impact observation.**
+**§3.6 Note (N) - the no-impact observation.**
 A Note is an observation the reviewer wants on the record that is *not a defect in the work product under review*: an out-of-scope remark, a no-action recommendation ("nothing to fix here, but worth knowing"), a sibling-class observation, a future-improvement suggestion. Notes carry **no score impact and no floor impact**. They are not findings. They use the ID form `N-1`, `N-2`, etc.
 
 The Note class exists to give the reviewer somewhere to put a true observation that is not a Minor. Without it, a conscientious reviewer who has nothing to fix but something to say is pushed to file the remark as a Minor, and a Minor under the stricter floor variants (§4.5) can block. The asymmetry is real: a reviewer whose own narrative says "no fix required" or "out of scope for this review" but who files the remark as a Minor has produced a verdict that fails its own floor for a non-defect. When a finding's narrative reads as a Note, classify it as a Note. (This is what §10.8, the calibration-loop tactic, turns on.)
@@ -71,10 +71,10 @@ The reviewer returns a single score in `[0.0, 10.0]` with one decimal of precisi
 
 | Band | Meaning | Action |
 |------|---------|--------|
-| 9.5–10.0 | Excellent. Nothing to add. | Ship; stop reviewing. |
-| 9.0–9.4 | Production-ready. | Ship if 0 C and 0 I (pass floor). |
-| 8.0–8.9 | Functional but flawed. | Address C/I, dispatch R2. |
-| 7.0–7.9 | Significant gaps. | Likely needs rework, not just revisions. |
+| 9.5-10.0 | Excellent. Nothing to add. | Ship; stop reviewing. |
+| 9.0-9.4 | Production-ready. | Ship if 0 C and 0 I (pass floor). |
+| 8.0-8.9 | Functional but flawed. | Address C/I, dispatch R2. |
+| 7.0-7.9 | Significant gaps. | Likely needs rework, not just revisions. |
 | < 7.0 | Not ready. | Rework before re-review. |
 
 **§4.2 Scoring is an opinion, the floor is a contract.**
@@ -90,10 +90,10 @@ The reviewer is primed to score conservatively. A reviewer that defaults to 9+ o
 When a verdict carries an explicit pass flag (i.e. the reviewer states `pass_asserted: true|false` in a stored or programmatic verdict (§13) rather than just narrating a `PASS`/`REVISE`/`REWORK` value), that flag MUST equal the floor formula:
 
 ```
-pass_asserted  ==  (score >= 9.0)  AND  (critical + important + minor == 0)
+pass_asserted  ==  (score >= 9.0)  AND  (critical == 0)  AND  (important == 0)
 ```
 
-A `pass_asserted: true` with any non-zero blocking-class count is a **malformed verdict**, not a pass. This is the machine-checkable form of the §10.5 anti-pattern (score-only floor): a reviewer that asserts PASS off the score alone, ignoring the finding counts, is caught by recomputing the formula from the counts and rejecting the mismatch. Validators should always recompute rather than trust the asserted flag. The counts are the ground truth; the assertion is only a claim. (Whether `minor` is in the conjunction depends on the floor variant in force; see §4.5.)
+A `pass_asserted: true` with any non-zero Critical or Important count is a **malformed verdict**, not a pass. This is the machine-checkable form of the §10.5 anti-pattern (score-only floor): a reviewer that asserts PASS off the score alone, ignoring the finding counts, is caught by recomputing the formula from the counts and rejecting the mismatch. Validators should always recompute rather than trust the asserted flag. The counts are the ground truth; the assertion is only a claim. This is the default floor (§4.2); `minor` enters the conjunction only under the Minor-inclusive variant, and the score bar drops to 8.5 under the Relaxed-Minor variant (see §4.5). The optional `floor_variant` field in the verdict record (§13) records which variant governs a stored verdict.
 
 **§4.5 Floor variants.**
 The default floor is `score >= 9.0 AND 0 C AND 0 I` (§4.2). Two stricter variants are sometimes warranted, set per operator policy, not per verdict:
@@ -107,16 +107,16 @@ The variant is an operator decision, fixed for a class of work and applied unifo
 
 ## §5. Round Protocol
 
-**§5.1 R1 — Initial review.**
+**§5.1 R1 - Initial review.**
 First dispatch. Reviewer receives the work product, scope, and modality. Returns a verdict in the §7 format.
 
 **§5.2 Pass at R1.**
 If `score ≥ 9.0 AND C = 0 AND I = 0`, the work product is ship-ready. Halt. Address Minors at Author discretion.
 
-**§5.3 Fail at R1 — dispatch R2.**
+**§5.3 Fail at R1 - dispatch R2.**
 If the floor is not met, the Author addresses Critical and Important findings. Each addressed finding is referenced by ID. The R2 dispatch includes the original work product, the modified work product, and the R1 verdict.
 
-**§5.4 R2 — Verification round.**
+**§5.4 R2 - Verification round.**
 Reviewer verifies that R1 findings have been addressed. May surface new findings if the changes introduced them. Returns verdict in the same format.
 
 **§5.5 Halt conditions.**
@@ -128,7 +128,7 @@ The protocol halts when any of the following hold:
 - **Operator override.** The Operator may halt at any verdict that includes only Important findings if the Operator accepts the residual risk and documents the override. The override record must name *who* authorized it, *which* Important findings are being accepted, the *residual-risk rationale*, and the *date*, captured wherever verdicts are stored (commit message, review log, or PR comment). An override without that record is indistinguishable from ignoring the finding. Critical findings are not subject to override.
 
 **§5.6 Round-count discipline.**
-Most work products converge in 1–2 rounds. A work product that requires more than 3 rounds is signaling that the underlying change is poorly scoped, not that it needs more review.
+Most work products converge in 1-2 rounds. A work product that requires more than 3 rounds is signaling that the underlying change is poorly scoped, not that it needs more review.
 
 ---
 

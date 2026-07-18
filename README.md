@@ -78,7 +78,7 @@ What sets RJ apart is what it refuses to inherit. The biases Zheng et al. docume
                               │
                     ┌─────────▼──────────┐
                     │  Score ≥ 9.0       │
-                    │  AND 0 Critical    │ ──► PASS — ship it
+                    │  AND 0 Critical    │ ──► PASS - ship it
                     │  AND 0 Important   │
                     └─────────┬──────────┘
                               │ no
@@ -128,7 +128,7 @@ Score: 9.4/10
 Critical: 0
 Important: 0
 Minor: 0
-PASS — ship it.
+PASS - ship it.
 ```
 
 That's the shape. The score moved 1.4 points, but the change that mattered was the C/I count going to zero.
@@ -149,11 +149,11 @@ There's also a discipline of stopping. After R2, sometimes R3, you hit diminishi
 
 ## Adopt this in 15 minutes
 
-1. **Copy the reviewer prompt** from [`templates/reviewer-prompt.md`](./templates/reviewer-prompt.md). Paste it as the system message of a new chat with whichever model you use for review (I use Claude for most work and GPT for cross-checks).
+1. **Copy the reviewer prompt** from [`templates/reviewer-prompt.md`](./templates/reviewer-prompt.md). Paste it as the system message of a new chat with whichever capable model you use for review. For high-stakes work, cross-check with a second model, ideally a different one (see [`PROTOCOL.md`](./PROTOCOL.md) §9.4).
 2. **Adopt the verdict format** in [`templates/verdict-template.md`](./templates/verdict-template.md). Ask the reviewer to return verdicts in that exact shape: score, C/I/M with one line each, finding IDs.
 3. **Use the pre-check gate** in [`templates/pre-check-gate.md`](./templates/pre-check-gate.md) before invoking RJ. It's a four-question test that takes thirty seconds and keeps you from running RJ on changes that don't need it.
 
-The floor is **≥ 9.0 AND 0 C/I**. Don't ship below it. Don't keep reviewing above it.
+The floor is **≥ 9.0 AND 0 C/I**. Don't ship below it. Don't keep reviewing above it. Stricter and relaxed floor variants are documented in [`PROTOCOL.md`](./PROTOCOL.md) §4.5.
 
 For the formal protocol (round structure, modality definitions, verdict schema, anti-patterns), see [`PROTOCOL.md`](./PROTOCOL.md). For a complete R1→R2 cycle on a synthetic code change, see [`examples/r1-r2-walkthrough.md`](./examples/r1-r2-walkthrough.md). For the harder case, a finding the author believes is a false positive, see [`examples/disputed-finding-walkthrough.md`](./examples/disputed-finding-walkthrough.md).
 
@@ -171,11 +171,11 @@ The name is a joke. The protocol isn't.
 
 This is one of a series of methodology pieces from building ORCA:
 
-- **Russian Judge** — *this repo.* Adversarial AI review with structured verdicts.
-- **[Three-Body Protocol](https://github.com/moranbickel/three-body-protocol)** — coordination across sessions in time.
-- **[Peer-Worker Convergence](https://github.com/moranbickel/peer-worker-convergence)** — coordination across sessions in parallel.
-- **[CSAE](https://github.com/moranbickel/csae)** — attestation chains for AI-generated commits.
-- **[Pre-IMPL Forensic Discipline](https://github.com/moranbickel/Pre-IMPL-Forensic-Discipline)** — catching wrong premises before they become wrong commits (v0.1 draft).
+- **Russian Judge** - *this repo.* Adversarial AI review with structured verdicts.
+- **[Three-Body Protocol](https://github.com/moranbickel/Three-Body-Protocol)** - coordination across sessions in time.
+- **[Peer-Worker Convergence](https://github.com/moranbickel/Peer-Worker-Convergence)** - coordination across sessions in parallel.
+- **[CSAE](https://github.com/moranbickel/CSAE)** - attestation chains for AI-generated commits.
+- **[Pre-IMPL Forensic Discipline](https://github.com/moranbickel/Pre-IMPL-Forensic-Discipline)** - catching wrong premises before they become wrong commits (v0.1 draft).
 
 More pieces as they're written.
 
@@ -194,4 +194,4 @@ This protocol was developed for use in production on ORCA (Orchestrated Reasonin
 
 If you adopt or build on this protocol, attribution is requested but not required for templates. For prose, attribution is required under CC BY 4.0.
 
-— Moran Bickel
+- Moran Bickel
