@@ -11,7 +11,7 @@ Synthetic again, chosen to illustrate the mechanics, not to represent a real rev
 A change to a pricing function. The author has refactored how an order discount is applied.
 
 ```python
-# pricing.py — modified
+# pricing.py - modified
 def apply_discount(order, discount_rate):
     """Return the order total after applying a fractional discount."""
     return order.subtotal * (1 - discount_rate)
@@ -72,7 +72,7 @@ This is the usual anatomy of a "false positive": a true finding about a latent f
 So the author does not argue. The author makes the implicit contract explicit:
 
 ```python
-# pricing.py — revised
+# pricing.py - revised
 def apply_discount(order, discount_rate):
     """Return the order total after applying a fractional discount.
 
@@ -134,7 +134,7 @@ Either way, the thing that resolves the dispute is a verdict from a reviewer the
 
 ## See also
 
-- [R1 → R2 walkthrough](./r1-r2-walkthrough.md) — the clean case, where author and reviewer agree.
-- [PROTOCOL.md §4](../PROTOCOL.md) — the floor as a contract over the decision, and the reviewer-reliability gap it does not close.
-- [PROTOCOL.md §5.5](../PROTOCOL.md) — halt conditions and the Operator-override boundary (Importants only; Criticals never).
-- [PROTOCOL.md §9.4](../PROTOCOL.md) — cross-model dispatch.
+- [R1 → R2 walkthrough](./r1-r2-walkthrough.md) - the clean case, where author and reviewer agree.
+- [PROTOCOL.md §4](../PROTOCOL.md) - the floor as a contract over the decision, and the reviewer-reliability gap it does not close.
+- [PROTOCOL.md §5.5](../PROTOCOL.md) - halt conditions and the Operator-override boundary (Importants only; Criticals never).
+- [PROTOCOL.md §9.4](../PROTOCOL.md) - cross-model dispatch.

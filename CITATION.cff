@@ -13,7 +13,7 @@ repository-code: "https://github.com/moranbickel/russian-judge"
 license:
   - MIT
   - CC-BY-4.0
-abstract: "Adversarial AI review with structured verdicts — C/I/M defect taxonomy, numerical pass floor, single- and cross-model audit modes."
+abstract: "Adversarial AI review with structured verdicts - C/I/M defect taxonomy, numerical pass floor, single- and cross-model audit modes."
 keywords:
   - ai-evaluation
   - llm-evaluation

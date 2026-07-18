@@ -11,7 +11,7 @@ The work product is a Python rate-limiter middleware function. The change adds p
 A diff submitted for review. Author has self-tested locally and believes it's ship-ready.
 
 ```python
-# rate_limiter.py — new
+# rate_limiter.py - new
 from collections import defaultdict
 from time import time
 
@@ -29,7 +29,7 @@ def is_rate_limited(client_ip):
 ```
 
 ```python
-# api.py — modified
+# api.py - modified
 from rate_limiter import is_rate_limited
 
 def handle_request(request):
@@ -98,7 +98,7 @@ VERDICT: REVISE
 The author addressed C-1, I-1, I-2. Skipped M-1 (out-of-scope refactor); accepted M-2 (renamed to `check_and_record`).
 
 ```python
-# rate_limiter.py — revised
+# rate_limiter.py - revised
 from collections import defaultdict
 from threading import Lock
 from time import time
@@ -134,7 +134,7 @@ def check_and_record(client_ip):
 ```
 
 ```python
-# tests/test_rate_limiter.py — new
+# tests/test_rate_limiter.py - new
 def test_below_limit_allows_request():
     # ...
 def test_at_limit_blocks_next_request():
@@ -190,7 +190,7 @@ IMPORTANT (I):
 
 MINOR (M):
   - M-1: (Carried from R1; author elected to defer. Acceptable.)
-  - M-3: The GC is opportunistic — it only fires when a request arrives
+  - M-3: The GC is opportunistic - it only fires when a request arrives
          after _GC_INTERVAL elapsed. On a service that idles for hours
          then resumes, memory accumulates until traffic returns. Not
          blocking, but worth noting in the docstring.
