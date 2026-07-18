@@ -21,8 +21,7 @@
       "type": "number",
       "minimum": 0,
       "maximum": 10,
-      "multipleOf": 0.1,
-      "description": "Reviewer score, [0.0, 10.0], one decimal of precision. Anchored bands per PROTOCOL.md §4.1."
+      "description": "Reviewer score in [0.0, 10.0]. By convention one decimal of precision; not machine-enforced, because a multipleOf 0.1 constraint spuriously rejects exact one-decimal values such as 9.1 and 9.2 under IEEE-754 float. Anchored bands per PROTOCOL.md §4.1."
     },
     "findings": {
       "type": "object",
@@ -92,7 +91,7 @@
         },
         "reviewer_model": {
           "type": "string",
-          "description": "Identifier of the model (or human) that produced this verdict. Required for cross-model dispatch (PROTOCOL.md §9.4) to be auditable — you cannot tell which model caught a finding without recording which model reviewed."
+          "description": "Identifier of the model (or human) that produced this verdict. Required for cross-model dispatch (PROTOCOL.md §9.4) to be auditable - you cannot tell which model caught a finding without recording which model reviewed."
         },
         "review_round": {
           "type": "string",
@@ -101,7 +100,12 @@
         },
         "pass_asserted": {
           "type": "boolean",
-          "description": "The reviewer's own PASS assertion. The floor invariant (PROTOCOL.md §4.4) requires this to equal `(score >= 9.0) AND (critical + important + minor == 0)`. A `pass_asserted: true` with any non-zero blocking-class count is a malformed verdict; validators recompute and reject the mismatch."
+          "description": "The reviewer's own PASS assertion. Under the default floor (PROTOCOL.md §4.2) it MUST equal `(score >= 9.0) AND (critical == 0) AND (important == 0)`; Minor findings do not affect the default floor. A `pass_asserted: true` with any non-zero Critical or Important count is a malformed verdict; validators recompute and reject the mismatch. Stricter floors are selected by `floor_variant` (PROTOCOL.md §4.5): the Minor-inclusive variant additionally requires 0 Minor, and the Relaxed-Minor variant lowers the score bar to 8.5."
+        },
+        "floor_variant": {
+          "type": "string",
+          "enum": ["default", "minor_inclusive", "relaxed_minor"],
+          "description": "Which pass-floor variant (PROTOCOL.md §4.5) governs `pass_asserted`. Absent or `default`: score >= 9.0 AND 0 Critical AND 0 Important, Minors permitted. `minor_inclusive`: additionally 0 Minor. `relaxed_minor`: score >= 8.5 AND 0 Critical AND 0 Important, one Minor permitted. Declarative; the schema recomputes the matching floor for `pass_asserted`."
         },
         "issued_at": {
           "type": "string",
@@ -110,6 +114,95 @@
       }
     }
   },
+  "allOf": [
+    {
+      "$comment": "C-1 floor enforcement. Default floor (PROTOCOL.md §4.2): when a record asserts pass_asserted:true and no stricter floor_variant is selected, require score >= 9.0 and zero Critical and zero Important. Minor findings do NOT affect the default floor.",
+      "if": {
+        "type": "object",
+        "required": ["record"],
+        "properties": {
+          "record": {
+            "type": "object",
+            "required": ["pass_asserted"],
+            "properties": { "pass_asserted": { "const": true } },
+            "not": {
+              "type": "object",
+              "required": ["floor_variant"],
+              "properties": { "floor_variant": { "enum": ["minor_inclusive", "relaxed_minor"] } }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "score": { "minimum": 9.0 },
+          "findings": {
+            "properties": {
+              "critical": { "maxItems": 0 },
+              "important": { "maxItems": 0 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Minor-inclusive variant (PROTOCOL.md §4.5): pass_asserted:true additionally requires zero Minor.",
+      "if": {
+        "type": "object",
+        "required": ["record"],
+        "properties": {
+          "record": {
+            "type": "object",
+            "required": ["pass_asserted", "floor_variant"],
+            "properties": {
+              "pass_asserted": { "const": true },
+              "floor_variant": { "const": "minor_inclusive" }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "score": { "minimum": 9.0 },
+          "findings": {
+            "properties": {
+              "critical": { "maxItems": 0 },
+              "important": { "maxItems": 0 },
+              "minor": { "maxItems": 0 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$comment": "Relaxed-Minor variant (PROTOCOL.md §4.5): score bar 8.5, zero Critical and zero Important, one Minor permitted.",
+      "if": {
+        "type": "object",
+        "required": ["record"],
+        "properties": {
+          "record": {
+            "type": "object",
+            "required": ["pass_asserted", "floor_variant"],
+            "properties": {
+              "pass_asserted": { "const": true },
+              "floor_variant": { "const": "relaxed_minor" }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "score": { "minimum": 8.5 },
+          "findings": {
+            "properties": {
+              "critical": { "maxItems": 0 },
+              "important": { "maxItems": 0 }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "findingCI": {
       "type": "object",
