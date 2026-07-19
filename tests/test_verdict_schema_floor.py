@@ -12,6 +12,12 @@ carries record.pass_asserted MUST satisfy the floor that its floor_variant
 selects; the schema enforces this so a malformed pass assertion is rejected
 rather than silently accepted.
 
+They also close template-vs-schema drift: every JSON example in
+templates/verdict-template.md is validated against the schema, so an edit
+to the template's examples that violates the schema (or a schema change the
+template no longer satisfies) turns this test red instead of shipping two
+documents that quietly disagree.
+
 Run: python tests/test_verdict_schema_floor.py
 Requires: jsonschema (pip install jsonschema)
 """
@@ -26,6 +32,7 @@ except ImportError:
     sys.exit(2)
 
 SCHEMA_PATH = pathlib.Path(__file__).resolve().parent.parent / "schemas" / "verdict.schema.json"
+TEMPLATE_PATH = pathlib.Path(__file__).resolve().parent.parent / "templates" / "verdict-template.md"
 
 
 def base(score, n_c=0, n_i=0, n_m=0, pass_asserted=None, floor_variant=None, verdict="PASS"):
@@ -47,6 +54,41 @@ def base(score, n_c=0, n_i=0, n_m=0, pass_asserted=None, floor_variant=None, ver
             rec["floor_variant"] = floor_variant
         doc["record"] = rec
     return doc
+
+
+def extract_json_blocks(md_text):
+    """Return every fenced ```json ... ``` block in the markdown, in order.
+
+    Only json-tagged fences are captured; the plain markdown-form verdict
+    examples (bare ``` fences) are skipped because they are not JSON.
+    """
+    blocks, inside, buf = [], False, []
+    for line in md_text.splitlines():
+        stripped = line.strip()
+        if not inside and stripped == "```json":
+            inside, buf = True, []
+        elif inside and stripped == "```":
+            inside = False
+            blocks.append("\n".join(buf))
+        elif inside:
+            buf.append(line)
+    return blocks
+
+
+def template_cases():
+    """Build a validation case per JSON example in verdict-template.md.
+
+    Every example must validate against the schema (should_validate=True).
+    Returns (blocks, cases) so the caller can guard on the block count -
+    a template that has lost its JSON examples would make the drift check
+    vacuous, so finding fewer than two is itself a failure.
+    """
+    blocks = extract_json_blocks(TEMPLATE_PATH.read_text(encoding="utf-8"))
+    cases = [
+        (f"template_example_{i}", json.loads(block), True)
+        for i, block in enumerate(blocks)
+    ]
+    return blocks, cases
 
 
 # (name, doc, should_validate)
@@ -80,8 +122,20 @@ CASES = [
 def main():
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     validator = Draft202012Validator(schema)
+
+    template_blocks, tcases = template_cases()
+    # Non-vacuity guard: the template must actually carry its JSON examples,
+    # or the drift check certifies nothing. The template ships at least the
+    # plain verdict and the record-bearing verdict.
+    if len(template_blocks) < 2:
+        print(f"FAIL: expected >= 2 json examples in {TEMPLATE_PATH.name}, "
+              f"found {len(template_blocks)} - the drift check would be vacuous.",
+              file=sys.stderr)
+        sys.exit(1)
+
+    all_cases = list(CASES) + tcases
     failures = []
-    for name, doc, should_validate in CASES:
+    for name, doc, should_validate in all_cases:
         errors = list(validator.iter_errors(doc))
         did_validate = not errors
         ok = did_validate == should_validate
@@ -96,7 +150,8 @@ def main():
         for name, exp, got, msgs in failures:
             print(f"  - {name}: expected validate={exp}, got {got}. {msgs}")
         sys.exit(1)
-    print(f"All {len(CASES)} floor cases pass.")
+    print(f"All {len(all_cases)} cases pass "
+          f"({len(CASES)} floor + {len(tcases)} template-drift).")
     sys.exit(0)
 
 
