@@ -176,6 +176,7 @@ This is one of a series of methodology pieces from building ORCA:
 - **[Peer-Worker Convergence](https://github.com/moranbickel/Peer-Worker-Convergence)** - coordination across sessions in parallel.
 - **[CSAE](https://github.com/moranbickel/CSAE)** - attestation chains for AI-generated commits.
 - **[Pre-IMPL Forensic Discipline](https://github.com/moranbickel/Pre-IMPL-Forensic-Discipline)** - catching wrong premises before they become wrong commits (v0.1 draft).
+- **[Docket](https://github.com/moranbickel/Docket)** - the numbered work ledger the sessions file against: one number per matter, claims before work, closures that cite commits.
 
 More pieces as they're written.
 
