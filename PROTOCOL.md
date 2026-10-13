@@ -37,11 +37,11 @@ A review invocation requires:
 Every finding the reviewer surfaces must be classified into exactly one of three classes. A finding without a class is malformed and must be re-classified before the verdict is accepted.
 
 **§3.1 Critical (C).**
-A defect that, if shipped, would cause a serious failure: production breakage, data corruption, legal/regulatory violation, security vulnerability, or correctness failure in the work product's primary purpose. A Critical finding fails the pass floor unconditionally. Any verdict with Critical findings cannot reach the pass floor regardless of score.
+A defect that, if shipped, would cause a serious failure: production breakage, data corruption, regulatory violation, security vulnerability, or correctness failure in the work product's primary purpose. A Critical finding fails the pass floor unconditionally. Any verdict with Critical findings cannot reach the pass floor regardless of score.
 
 *Examples (across modalities):*
 - Code: an unhandled exception path that will crash production.
-- Domain: a legal claim that cites a repealed statute.
+- Domain: a design document that cites a deprecated API as the supported path.
 - Spec: a contract clause that contradicts a downstream consumer's documented expectations.
 
 **§3.2 Important (I).**
@@ -128,7 +128,7 @@ The protocol halts when any of the following hold:
 - **Operator override.** The Operator may halt at any verdict that includes only Important findings if the Operator accepts the residual risk and documents the override. The override record must name *who* authorized it, *which* Important findings are being accepted, the *residual-risk rationale*, and the *date*, captured wherever verdicts are stored (commit message, review log, or PR comment). An override without that record is indistinguishable from ignoring the finding. Critical findings are not subject to override.
 
 **§5.6 Round-count discipline.**
-Most work products converge in 1-2 rounds. A work product that requires more than 3 rounds is signaling that the underlying change is poorly scoped, not that it needs more review.
+The protocol expects most work products to converge within a few rounds (an expectation, not a measured rate). A work product that requires more than 3 rounds is signaling that the underlying change is poorly scoped, not that it needs more review.
 
 ---
 
@@ -221,10 +221,10 @@ Reviewer is primed for code-quality review: bugs, regressions, edge cases, missi
 Reviewer is primed for domain-content review: substantive correctness, factual accuracy, citation correctness, register, internal consistency. Domain RJ is the default for prose, specs, and any work product whose primary axis is content rather than code.
 
 **§9.3 Dual RJ.**
-Both Code RJ and Domain RJ run, independently, on the same work product. Used when a change touches both code and domain content (for example: a code change that modifies how legal text is generated). The two verdicts are evaluated independently against the floor; the work product passes only if both pass.
+Both Code RJ and Domain RJ run, independently, on the same work product. Used when a change touches both code and domain content (for example: a payments change that alters how refund amounts are computed and also rewrites the customer-facing refund policy text). The two verdicts are evaluated independently against the floor; the work product passes only if both pass.
 
 **§9.4 Cross-model dispatch.**
-The reviewer for any modality may be a different model from the Author's primary model. In my experience, dispatching Domain RJ to a different model from the one that authored the work product catches defects that single-model review misses repeatedly. The protocol does not mandate cross-model dispatch but recommends it for high-stakes work.
+The reviewer for any modality may be a different model from the Author's primary model. In my experience, dispatching Domain RJ to a different model from the one that authored the work product may catch defects that single-model review misses; this is an unmeasured impression. The protocol does not mandate cross-model dispatch but recommends it for high-stakes work.
 
 ---
 
@@ -264,7 +264,7 @@ The protocol does not solve:
 
 - **A weak reviewer.** If the reviewing model is incapable of finding defects in the work product's domain, no amount of priming will surface them. Cross-model dispatch is the partial mitigation.
 - **An adversarial Author.** An Author who works around the floor (e.g., rephrasing findings to avoid Critical classification) defeats the protocol. The protocol assumes good-faith application.
-- **Domain-specific correctness without domain-capable reviewers.** Legal, medical, regulated-industry content needs reviewers with domain capability. The protocol structures the review; it does not produce expertise.
+- **Domain-specific correctness without domain-capable reviewers.** Medical, financial, regulated-industry content needs reviewers with domain capability. The protocol structures the review; it does not produce expertise.
 
 ---
 

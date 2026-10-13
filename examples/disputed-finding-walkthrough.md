@@ -117,7 +117,7 @@ But suppose the reviewer holds. R2 still asserts C-1, and the author still belie
 Still not author fiat. The escape hatch is an **independent second opinion**, per [PROTOCOL.md §9.4](../PROTOCOL.md) (cross-model dispatch): send the same work product and the disputed verdict to a different model.
 
 - If the second reviewer also holds C-1, the author is almost certainly the one who is wrong. Two independent adversarial reviewers converging on a finding is strong signal.
-- If the second reviewer withdraws it after seeing the context, you have evidence the finding was model-specific, the kind of artifact (position bias, a misread) the [Prior art](../README.md#prior-art) literature predicts. You ship on the second verdict, and you have a record of *why*.
+- If the second reviewer withdraws it after seeing the context, you have evidence the finding was model-specific, the kind of artifact (position bias, a misread) the [Prior art](../README.md#prior-art) literature predicts. The second verdict stands, and you have a record of *why*.
 
 Either way, the thing that resolves the dispute is a verdict from a reviewer the author doesn't control, not the author's confidence.
 

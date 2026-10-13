@@ -34,7 +34,7 @@ C/I/M is the smallest taxonomy that preserves priority signal without inviting h
 
 ### Why does the floor require zero Important findings, not just zero Critical?
 
-Because Important findings are the dangerous ones to defer. Criticals are obvious - you don't ship them. The temptation to defer is highest with Importants: "we'll address that next sprint," "the customer probably won't hit that edge case," "the test coverage gap isn't blocking."
+Because Important findings are the dangerous ones to defer. Criticals are obvious - they fail the floor outright. The temptation to defer is highest with Importants: "we'll address that next sprint," "the customer probably won't hit that edge case," "the test coverage gap isn't blocking."
 
 Importants are exactly where defects get smuggled into production. The floor demands them addressed because that's where the discipline matters.
 
@@ -108,7 +108,7 @@ Yes. I've used it on:
 
 - Code (the obvious case).
 - Formal specs (RFC-shaped documents).
-- Legal claims.
+- Policy documents and other regulated-content drafts.
 - Prose (this README went through RJ before publication).
 - Proposals and pitch decks.
 
@@ -126,15 +126,13 @@ The pragmatic discipline: if you disagree often, your reviewer is wrong-shaped f
 
 ### How long does this take to adopt?
 
-The 15-minute version is in [`docs/how-to-adopt.md`](./how-to-adopt.md). Functional adoption - running RJ as a habit on real work - usually takes a week. Fluent use, where you stop thinking about the protocol and just use it, takes 2-4 weeks of consistent application.
+The 15-minute version is in [`docs/how-to-adopt.md`](./how-to-adopt.md). Functional adoption - running RJ as a habit on real work - took the author about a week (anecdotal, unmeasured). Fluent use, where you stop thinking about the protocol and just use it, took 2-4 weeks of consistent application.
 
 ---
 
-### Did you really build this for legal-AI work?
+### Where did this come from?
 
-The protocol came out of the author's work on AI-assisted legal drafting, where a wrong fact, citation, or claim in a filing is costly and vague review wasn't tenable. RJ emerged from needing structure. This is the author's anecdotal account; see [`EVIDENCE.md`](../EVIDENCE.md) for what has and has not been measured.
-
-The protocol generalized cleanly to non-legal work, which is why this repo exists. But the adversarial framing and the strict floor came from a context where defects had real cost.
+The protocol came out of the author's own AI-assisted engineering work, where vague review wasn't tenable and a structured, adversarial format with a strict floor was needed. This is the author's anecdotal account; see [`EVIDENCE.md`](../EVIDENCE.md) for what has and has not been measured.
 
 ---
 

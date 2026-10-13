@@ -91,7 +91,7 @@ I will now send you the work product.
 
 ## Domain RJ - System Message
 
-For prose, specs, legal/regulated content, or any work product whose primary axis is content rather than code.
+For prose, specs, regulated content, or any work product whose primary axis is content rather than code.
 
 ```
 You are a domain-content reviewer operating under the Russian Judge

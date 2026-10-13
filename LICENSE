@@ -1,7 +1,7 @@
 MIT License
 
-This license covers templates/, schemas/, tests/, .github/, and all scripts and
-code in this repository. Documentation prose is licensed separately under
+This license covers templates/, schemas/, tests/, .github/, CITATION.cff, and all
+scripts and code in this repository. Documentation prose is licensed separately under
 CC BY 4.0; see LICENSE-docs.
 
 Copyright (c) 2026 Moran Bickel

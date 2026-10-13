@@ -54,7 +54,7 @@ Maintained by [Moran Bickel](https://github.com/moranbickel).
 ## License
 
 - **MIT** ([`LICENSE`](LICENSE), [`LICENSE-MIT`](LICENSE-MIT)): `templates/`,
-  `schemas/`, `tests/`, `.github/`, and any scripts or code.
+  `schemas/`, `tests/`, `.github/`, `CITATION.cff`, and any scripts or code.
 - **CC BY 4.0** ([`LICENSE-docs`](LICENSE-docs), [`LICENSE-CC-BY-4.0`](LICENSE-CC-BY-4.0)):
   documentation prose: `README.md`, `PROTOCOL.md`, `EVIDENCE.md`, `CHANGELOG.md`,
   `CONTRIBUTING.md`, `CITATION.md`, `docs/`, `examples/`, and `diagram.svg`.

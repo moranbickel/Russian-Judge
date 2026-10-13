@@ -1,6 +1,7 @@
 MIT License — Templates and code
 
-Applies to all files under templates/ and any scripts in this repository.
+Applies to templates/, schemas/, tests/, .github/, CITATION.cff, and any scripts or
+code in this repository.
 
 Copyright (c) 2026 Moran Bickel
 

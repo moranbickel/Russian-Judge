@@ -20,7 +20,7 @@ That was the moment I built the protocol. Three things had to change:
 
 1. **The reviewer's role.** Default LLM behavior is agreeable; I had to invert it explicitly with adversarial framing.
 2. **The defect taxonomy.** Findings without a class are unprioritized. Three classes - Critical, Important, Minor - make priority structural rather than implicit.
-3. **The pass criterion.** The score alone is a vibe. The score *combined with the finding counts* is a contract: `≥ 9.0 AND 0 Critical AND 0 Important`. That conjunction is what separates "ship" from "almost ship."
+3. **The pass criterion.** The score alone is a vibe. The score *combined with the finding counts* is a contract: `≥ 9.0 AND 0 Critical AND 0 Important`. That conjunction is what separates "passes" from "almost passes."
 
 That third piece is the load-bearing one. I cannot overstate this. A 9.5 with a Critical finding does not pass. A 9.0 with three Minors does. The score is the reviewer's opinion; the floor is the contract.
 
@@ -52,7 +52,7 @@ I want to be explicit about this. RJ is structure, not capability.
 
 **The unknown unknown.** RJ cannot find what neither the reviewer nor the priming directs attention toward. A Code-RJ-only review on a change that affects domain content will not catch the domain-content defect. Modality discipline (§9) addresses this; but if the Author misclassifies the modality, the gap is invisible.
 
-**Substantive expertise.** A protocol structures judgment. It does not produce judgment. RJ on legal content needs reviewers with legal capability. RJ on medical content needs medical capability. Generic-purpose models often fail in regulated domains.
+**Substantive expertise.** A protocol structures judgment. It does not produce judgment. RJ on medical content needs medical capability. RJ on financial content needs financial capability. Generic-purpose models often fail in regulated domains.
 
 ---
 
