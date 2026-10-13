@@ -3,10 +3,10 @@
 ## Unreleased
 
 - **Breaking (wording only, no schema change):** the 9.0-9.4 score band is renamed from "Production-ready" to "Strong; no blocking findings" in `PROTOCOL.md` and both `templates/reviewer-prompt.md` primings. Reviewers that echo the band label will now emit the new wording. The verdict enum (`PASS` / `REVISE` / `REWORK`) and every schema field are unchanged, so no example or fixture needed to change.
-- Removed deployment-authorizing wording ("ship", "ship-ready", "PASS - ship") from `PROTOCOL.md`, `schemas/verdict.schema.json`, `diagram.svg`, `docs/how-to-adopt.md`, `docs/faq.md`, `docs/rationale.md`, `examples/r1-r2-walkthrough.md` and `examples/disputed-finding-walkthrough.md`; the reviewer priming and protocol now state that a verdict is a review judgment, can be wrong, and is not authorization to deploy, release, or file.
+- Removed verdict-authorizing wording (a passing verdict as permission to ship: "ship-ready", "PASS - ship", "Production-ready") from `PROTOCOL.md`, `schemas/verdict.schema.json`, `diagram.svg`, `docs/how-to-adopt.md`, `docs/faq.md`, `docs/rationale.md`, `examples/r1-r2-walkthrough.md` and `examples/disputed-finding-walkthrough.md`; the reviewer priming and protocol now state that a verdict is a review judgment, can be wrong, and is not authorization to deploy, release, or file. Wording about shipping the change itself (for example "ship without RJ" in the pre-check gate) is kept.
 - `EVIDENCE.md` rewritten: removed the work-product volume figure and frequency claims; states that effectiveness is anecdotal and that no public evaluation of reviewer accuracy exists.
 - Added `.github/workflows/test.yml` (job `test`) running `tests/test_verdict_schema_floor.py`.
-- Licensing: `LICENSE` header states its scope; added `LICENSE-docs` (CC BY 4.0 notice); the README license section lists which paths fall under which license.
+- Licensing: `LICENSE` header states its scope; `LICENSE-CC-BY-4.0` scope line updated to match; the README license section lists which paths fall under which license.
 
 - README.md - added a **Prior art** section engaging the LLM-as-judge literature (Zheng et al. 2023, HELM) and stating what RJ does and does not inherit from it.
 - examples/disputed-finding-walkthrough.md - new worked example covering a disputed finding (the author believes the reviewer is wrong): the false-positive-vs-latent-fragility decomposition, why a Critical is not author-overridable, and cross-model dispatch as the dispute resolver.
