@@ -14,13 +14,13 @@ I tried the next obvious thing: ask the model to score the work. "Rate this 1-10
 
 The scores were also agreeable. 8.5. 9.0. 8.7. The score moved a tenth or two but never delivered information. A 9.0 from this kind of reviewer was indistinguishable from an 8.5; both meant "no major flags." The number was a vibe.
 
-The 8.5/10-then-broke-production incident referenced in the README is the example I keep coming back to. The reviewer's findings - vague, unprioritized, mixed in with stylistic suggestions - had buried the defect under cosmetic noise. The score told me the work was acceptable. The structure of the review told me nothing about which of the comments mattered.
+The pattern I keep coming back to is an 8.5/10 review followed by a production defect (an anecdote from the author's own work; no public record). The reviewer's findings - vague, unprioritized, mixed in with stylistic suggestions - had buried the defect under cosmetic noise. The score told me the work was acceptable. The structure of the review told me nothing about which of the comments mattered.
 
 That was the moment I built the protocol. Three things had to change:
 
 1. **The reviewer's role.** Default LLM behavior is agreeable; I had to invert it explicitly with adversarial framing.
 2. **The defect taxonomy.** Findings without a class are unprioritized. Three classes - Critical, Important, Minor - make priority structural rather than implicit.
-3. **The pass criterion.** The score alone is a vibe. The score *combined with the finding counts* is a contract: `≥ 9.0 AND 0 Critical AND 0 Important`. That conjunction is what separates "ship" from "almost ship."
+3. **The pass criterion.** The score alone is a vibe. The score *combined with the finding counts* is a contract: `≥ 9.0 AND 0 Critical AND 0 Important`. That conjunction is what separates "passes" from "almost passes."
 
 That third piece is the load-bearing one. I cannot overstate this. A 9.5 with a Critical finding does not pass. A 9.0 with three Minors does. The score is the reviewer's opinion; the floor is the contract.
 
@@ -52,7 +52,7 @@ I want to be explicit about this. RJ is structure, not capability.
 
 **The unknown unknown.** RJ cannot find what neither the reviewer nor the priming directs attention toward. A Code-RJ-only review on a change that affects domain content will not catch the domain-content defect. Modality discipline (§9) addresses this; but if the Author misclassifies the modality, the gap is invisible.
 
-**Substantive expertise.** A protocol structures judgment. It does not produce judgment. RJ on legal content needs reviewers with legal capability. RJ on medical content needs medical capability. Generic-purpose models often fail in regulated domains.
+**Substantive expertise.** A protocol structures judgment. It does not produce judgment. RJ on medical content needs medical capability. RJ on financial content needs financial capability. Generic-purpose models often fail in regulated domains.
 
 ---
 
@@ -68,4 +68,4 @@ I want to be explicit about this. RJ is structure, not capability.
 
 ---
 
-*Version notes: this is the v1.0 rationale. Revisions tracked in CHANGELOG.md.*
+*Version notes: this is the rationale for the protocol as first published. Revisions tracked in CHANGELOG.md.*

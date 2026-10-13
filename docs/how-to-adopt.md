@@ -1,6 +1,6 @@
 # How to Adopt Russian Judge
 
-Concrete steps to start using RJ today. Estimated time to functional adoption: **15 minutes**. Estimated time to fluent use: **a week of real work**.
+Concrete steps to start using RJ today. The author's rough, unmeasured estimates: **15 minutes** to functional adoption, **a week of real work** to fluent use.
 
 ---
 
@@ -8,7 +8,7 @@ Concrete steps to start using RJ today. Estimated time to functional adoption: *
 
 ### Step 1. Pick your reviewer.
 
-Use whichever capable LLM you have access to. Claude (Sonnet or Opus) and GPT-5 work well for general code and prose review. For domain-specific work (legal, medical, regulated), prefer the model that demonstrates the strongest domain capability in your evaluations.
+Use whichever capable LLM you have access to. Claude (Sonnet or Opus) and GPT-5 work well for general code and prose review. For domain-specific work (medical, financial, regulated), prefer the model that demonstrates the strongest domain capability in your evaluations.
 
 ### Step 2. Open a new session for the reviewer.
 
@@ -24,7 +24,7 @@ Paste a recent code change or piece of writing as the first user message. The re
 
 ### Step 5. Apply the floor.
 
-If the verdict is `score ≥ 9.0 AND 0 Critical AND 0 Important`, you ship. Otherwise, address the C/I findings and dispatch R2 with the addendum from the templates.
+If the verdict is `score ≥ 9.0 AND 0 Critical AND 0 Important`, the review passes the floor. A pass is a review judgment, not authorization to deploy or release; other required checks still apply. Otherwise, address the C/I findings and dispatch R2 with the addendum from the templates.
 
 That's the loop.
 
@@ -58,7 +58,7 @@ When a change touches both code and domain content, run both modalities. Two ses
 
 ### Add cross-model dispatch.
 
-If you have access to multiple capable models, periodically dispatch the same review to a different model. Different models have different blind spots. I have personally watched a different model find a Critical defect that three previous rounds with the same model missed. The asymmetry between cost (one extra dispatch) and benefit (a defect that wouldn't have been caught) is dramatic.
+If you have access to multiple capable models, periodically dispatch the same review to a different model. Different models have different blind spots. In one anecdotal case (unmeasured, no public record), a different model found a Critical defect that three previous rounds with the same model missed. The asymmetry between cost (one extra dispatch) and benefit (a defect that wouldn't have been caught) is dramatic.
 
 ### Establish team conventions.
 
@@ -81,11 +81,11 @@ You'll know you've adopted RJ when:
 - You run it without thinking about it on changes that pass the gate.
 - You don't run it on changes that don't.
 - You stop reading verdicts as praise or criticism - you read them as a structured signal that tells you what to do next.
-- You ship at the floor without seeking reassurance above it.
+- You treat the floor as the pass line without seeking reassurance above it.
 - You halt at R2/R3 without seeking a fourth round.
 - Your verdict distributions stabilize in the 8.0-9.5 band, with occasional outliers in both directions.
 
-This typically takes 2-4 weeks of consistent use.
+In the author's experience (unmeasured) this takes 2-4 weeks of consistent use.
 
 ---
 

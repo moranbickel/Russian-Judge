@@ -8,7 +8,7 @@ The work product is a Python rate-limiter middleware function. The change adds p
 
 ## The work product
 
-A diff submitted for review. Author has self-tested locally and believes it's ship-ready.
+A diff submitted for review. Author has self-tested locally and believes it's finished.
 
 ```python
 # rate_limiter.py - new
@@ -198,7 +198,7 @@ MINOR (M):
 VERDICT: PASS
 ```
 
-Author ships. Optionally addresses M-3 in a follow-up; it's non-blocking.
+The change passes the floor. The author optionally addresses M-3 in a follow-up; it's non-blocking. Other required checks and the release decision are separate.
 
 ---
 

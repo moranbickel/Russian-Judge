@@ -47,7 +47,7 @@ That's the gate. Everything below is elaboration.
                                                               │ Could a defect here cause    │
                                                               │ - production breakage?       │
                                                               │ - data corruption?           │
-                                                              │ - legal/regulatory harm?     │
+                                                              │ - regulatory harm?           │
                                                               │ - security exposure?         │
                                                               │ - substantive correctness    │
                                                               │   failure in primary purpose?│
@@ -65,7 +65,7 @@ That's the gate. Everything below is elaboration.
 
 - **Code that touches a module contract.** Adding a parameter to a function whose callers are in another file. Even a "small" signature change.
 - **A function that produces a file consumed by another process.** Schema changes are contract changes.
-- **Domain content where a wrong word matters.** Legal claims, medical instructions, regulatory filings. Wrong = harm.
+- **Domain content where a wrong word matters.** Medical instructions, safety procedures, compliance documents. Wrong = harm.
 - **Refactors that change behavior boundaries.** Extracting a method, inlining a method, changing what's public.
 - **A new feature touching existing flows.** New code paths can interact with existing paths in ways the author didn't anticipate.
 - **A "small" fix to a function that other functions depend on.** Two-line changes that drop a guard are exactly how production breaks.
@@ -97,7 +97,7 @@ The question "is the change small?" trains the wrong instinct. The question "cou
 
 ## Common mistake: "I don't have time for RJ"
 
-If the change passes the gate, RJ is the cheap path. The expensive path is the production incident, the corrupted data, the wrong legal filing. RJ takes minutes; the consequences of skipped review can take days.
+If the change passes the gate, RJ is the cheap path. The expensive path is the production incident, the corrupted data, the payment sent twice. RJ takes minutes; the consequences of skipped review can take days.
 
 If you're tempted to skip RJ on a change that passed the gate, the right move is usually to ship a smaller change - one that *doesn't* pass the gate - and follow up with the riskier change separately.
 

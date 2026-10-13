@@ -31,17 +31,17 @@
         "critical": {
           "type": "array",
           "items": { "$ref": "#/$defs/findingCI" },
-          "description": "Critical findings. Block shipping unconditionally."
+          "description": "Critical findings. Fail the pass floor unconditionally."
         },
         "important": {
           "type": "array",
           "items": { "$ref": "#/$defs/findingCI" },
-          "description": "Important findings. Block shipping at the pass floor."
+          "description": "Important findings. Fail the pass floor."
         },
         "minor": {
           "type": "array",
           "items": { "$ref": "#/$defs/findingM" },
-          "description": "Minor findings. Do not block shipping."
+          "description": "Minor findings. Do not fail the pass floor."
         },
         "notes": {
           "type": "array",
