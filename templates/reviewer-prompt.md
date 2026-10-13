@@ -207,7 +207,7 @@ You may surface new findings if my changes introduced any.
 
 **Why mandate the format.** Structured output is what makes the verdict actionable. A reviewer that returns a paragraph of feedback has produced a vibe, not a verdict.
 
-**Why classify upward when uncertain.** A Critical finding misclassified as Important might ship. An Important finding misclassified as Critical only delays shipping by one round. The asymmetry favors classifying up.
+**Why classify upward when uncertain.** A Critical finding misclassified as Important might pass the floor. An Important finding misclassified as Critical only delays the pass by one round. The asymmetry favors classifying up.
 
 **Why the Note class.** Without somewhere to put a true-but-non-defect observation, a conscientious reviewer files it as a Minor - and under a Minor-inclusive floor (PROTOCOL.md §4.5) a Minor blocks. Notes give the reviewer a place to say "no fix required here, but worth knowing" without manufacturing a blocking finding on clean work. This is the single most common calibration drift in weaker reviewers (PROTOCOL.md §10.8): a fresh praise-Minor each round, self-asserted as PASS anyway. If re-prompting the same model to reclassify just produces the next praise-Minor, escalate the terminal round to a stronger model - it classifies the remark as a Note and returns the clean verdict the work warrants (this is cross-model dispatch, PROTOCOL.md §9.4, used as a recovery move).
 

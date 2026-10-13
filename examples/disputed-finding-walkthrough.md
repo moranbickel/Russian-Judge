@@ -1,6 +1,6 @@
 # Worked Example: A Disputed Finding
 
-The [R1 → R2 walkthrough](./r1-r2-walkthrough.md) shows the easy case: the reviewer is right, the author agrees, the findings get fixed. This example shows the hard case: **the reviewer raises a finding the author believes is wrong.** That's the protocol's sharpest judgment call, because it sits directly on the gap [PROTOCOL.md §4](../PROTOCOL.md) names: the floor decides ship/no-ship *given the findings as classified*, but it does not guarantee the reviewer classified correctly.
+The [R1 → R2 walkthrough](./r1-r2-walkthrough.md) shows the easy case: the reviewer is right, the author agrees, the findings get fixed. This example shows the hard case: **the reviewer raises a finding the author believes is wrong.** That's the protocol's sharpest judgment call, because it sits directly on the gap [PROTOCOL.md §4](../PROTOCOL.md) names: the floor decides pass/revise *given the findings as classified*, but it does not guarantee the reviewer classified correctly.
 
 Synthetic again, chosen to illustrate the mechanics, not to represent a real review.
 
@@ -117,7 +117,7 @@ But suppose the reviewer holds. R2 still asserts C-1, and the author still belie
 Still not author fiat. The escape hatch is an **independent second opinion**, per [PROTOCOL.md §9.4](../PROTOCOL.md) (cross-model dispatch): send the same work product and the disputed verdict to a different model.
 
 - If the second reviewer also holds C-1, the author is almost certainly the one who is wrong. Two independent adversarial reviewers converging on a finding is strong signal.
-- If the second reviewer withdraws it after seeing the context, you have evidence the finding was model-specific, the kind of artifact (position bias, a misread) the [Prior art](../README.md#prior-art) literature predicts. The second verdict stands, and you have a record of *why*.
+- If the second reviewer withdraws it after seeing the context, you have evidence the finding was model-specific, the kind of artifact (position bias, a misread) the related LLM-as-judge literature linked from the README's [Limits](../README.md#limits) section predicts. The second verdict stands, and you have a record of *why*.
 
 Either way, the thing that resolves the dispute is a verdict from a reviewer the author doesn't control, not the author's confidence.
 

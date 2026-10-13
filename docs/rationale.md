@@ -68,4 +68,4 @@ I want to be explicit about this. RJ is structure, not capability.
 
 ---
 
-*Version notes: this is the v1.0 rationale. Revisions tracked in CHANGELOG.md.*
+*Version notes: this is the rationale for the protocol as first published. Revisions tracked in CHANGELOG.md.*
