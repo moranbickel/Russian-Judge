@@ -45,7 +45,7 @@
 
   <!-- PASS -->
   <rect x="540" y="280" width="120" height="44" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
-  <text class="th" x="600" y="307" text-anchor="middle" fill="#085041">PASS - ship</text>
+  <text class="th" x="600" y="307" text-anchor="middle" fill="#085041">PASS - floor met</text>
 
   <line x1="600" y1="256" x2="600" y2="280" stroke="#0F6E56" stroke-width="1.5" fill="none"/>
 

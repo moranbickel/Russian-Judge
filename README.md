@@ -1,6 +1,6 @@
 # Russian Judge
 
-A review prompt and verdict format for AI-assisted work. Findings have a severity,
+**A review prompt and verdict format for AI-assisted work.** Findings have a severity,
 an explanation, and a consequence. The default pass rule is **score >= 9.0,
 zero Critical findings, and zero Important findings**.
 
@@ -50,4 +50,11 @@ Related evaluation work includes [MT-Bench](https://arxiv.org/abs/2306.05685) an
 [HELM](https://arxiv.org/abs/2211.09110). See the protocol for the workflow here.
 
 Maintained by [Moran Bickel](https://github.com/moranbickel).
-Prose: [CC BY 4.0](LICENSE-CC-BY-4.0). Templates and code: [MIT](LICENSE-MIT).
+
+## License
+
+- **MIT** ([`LICENSE`](LICENSE), [`LICENSE-MIT`](LICENSE-MIT)): `templates/`,
+  `schemas/`, `tests/`, `.github/`, and any scripts or code.
+- **CC BY 4.0** ([`LICENSE-docs`](LICENSE-docs), [`LICENSE-CC-BY-4.0`](LICENSE-CC-BY-4.0)):
+  documentation prose: `README.md`, `PROTOCOL.md`, `EVIDENCE.md`, `CHANGELOG.md`,
+  `CONTRIBUTING.md`, `CITATION.md`, `docs/`, `examples/`, and `diagram.svg`.

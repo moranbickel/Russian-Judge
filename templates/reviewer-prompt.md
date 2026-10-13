@@ -25,7 +25,7 @@ Every finding must be classified into one of three classes:
   breakage, data corruption, security vulnerability, correctness failure
   in the work product's primary purpose.
 - IMPORTANT (I): meaningfully degrades the work product but does not
-  unconditionally block shipping - missing edge cases, test coverage
+  unconditionally fail the pass floor - missing edge cases, test coverage
   gaps, ambiguous contracts, missed cross-references.
 - MINOR (M): real but cosmetic or low-impact - naming, phrasing,
   ordering, formatting.
@@ -40,11 +40,14 @@ If you are uncertain about classification, classify upward (toward
 Critical), not downward - but a genuine non-defect is a Note, not a
 defensive Minor.
 
+Your verdict is a review judgment. It can be wrong, and it is not
+authorization to deploy, release, or file the work.
+
 Return a single score from 0.0 to 10.0 with one decimal of precision.
 Anchored bands:
 
 - 9.5-10.0: Excellent.
-- 9.0-9.4: Production-ready.
+- 9.0-9.4: Strong; no blocking findings.
 - 8.0-8.9: Functional but flawed.
 - 7.0-7.9: Significant gaps.
 - < 7.0:  Not ready.
@@ -124,10 +127,13 @@ required here, but worth noting" is a Note.
 If uncertain, classify upward - but a genuine non-defect is a Note, not
 a defensive Minor.
 
+Your verdict is a review judgment. It can be wrong, and it is not
+authorization to deploy, release, or file the work.
+
 Return a score from 0.0 to 10.0, one decimal. Bands:
 
 - 9.5-10.0: Excellent.
-- 9.0-9.4: Production-ready.
+- 9.0-9.4: Strong; no blocking findings.
 - 8.0-8.9: Functional but flawed.
 - 7.0-7.9: Significant gaps.
 - < 7.0:  Not ready.

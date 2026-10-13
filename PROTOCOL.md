@@ -37,7 +37,7 @@ A review invocation requires:
 Every finding the reviewer surfaces must be classified into exactly one of three classes. A finding without a class is malformed and must be re-classified before the verdict is accepted.
 
 **§3.1 Critical (C).**
-A defect that, if shipped, would cause a serious failure: production breakage, data corruption, legal/regulatory violation, security vulnerability, or correctness failure in the work product's primary purpose. A Critical finding blocks shipping unconditionally. Any verdict with Critical findings cannot reach the pass floor regardless of score.
+A defect that, if shipped, would cause a serious failure: production breakage, data corruption, legal/regulatory violation, security vulnerability, or correctness failure in the work product's primary purpose. A Critical finding fails the pass floor unconditionally. Any verdict with Critical findings cannot reach the pass floor regardless of score.
 
 *Examples (across modalities):*
 - Code: an unhandled exception path that will crash production.
@@ -45,10 +45,10 @@ A defect that, if shipped, would cause a serious failure: production breakage, d
 - Spec: a contract clause that contradicts a downstream consumer's documented expectations.
 
 **§3.2 Important (I).**
-A defect that meaningfully degrades the work product but does not unconditionally block shipping. Test coverage gaps, missing edge cases that are unlikely but plausible, ambiguous wording, missed cross-references. Important findings block shipping at the pass floor (≥ 9.0 + 0 C + 0 I) but may be deferred by explicit Operator decision when the Operator accepts the residual risk.
+A defect that meaningfully degrades the work product but does not unconditionally fail the pass floor. Test coverage gaps, missing edge cases that are unlikely but plausible, ambiguous wording, missed cross-references. Important findings fail the pass floor (≥ 9.0 + 0 C + 0 I) but may be deferred by explicit Operator decision when the Operator accepts the residual risk.
 
 **§3.3 Minor (M).**
-A defect that is real but cosmetic or low-impact. Naming, phrasing, ordering, formatting. Minors do not block shipping. Many ship-ready verdicts include Minor findings; the Operator addresses them or doesn't.
+A defect that is real but cosmetic or low-impact. Naming, phrasing, ordering, formatting. Minors do not fail the pass floor. Many passing verdicts include Minor findings; the Operator addresses them or doesn't.
 
 **§3.4 Anti-pattern: "Issue."**
 The reviewer must not return findings as an undifferentiated "Issue" or "Concern." Every finding has a class. If the reviewer is uncertain about classification, the protocol mandates classifying upward (toward Critical), not downward.
@@ -71,8 +71,8 @@ The reviewer returns a single score in `[0.0, 10.0]` with one decimal of precisi
 
 | Band | Meaning | Action |
 |------|---------|--------|
-| 9.5-10.0 | Excellent. Nothing to add. | Ship; stop reviewing. |
-| 9.0-9.4 | Production-ready. | Ship if 0 C and 0 I (pass floor). |
+| 9.5-10.0 | Excellent. Nothing to add. | Stop reviewing. |
+| 9.0-9.4 | Strong; no blocking findings. | Passes the floor if 0 C and 0 I. |
 | 8.0-8.9 | Functional but flawed. | Address C/I, dispatch R2. |
 | 7.0-7.9 | Significant gaps. | Likely needs rework, not just revisions. |
 | < 7.0 | Not ready. | Rework before re-review. |
@@ -81,7 +81,7 @@ The reviewer returns a single score in `[0.0, 10.0]` with one decimal of precisi
 The score is the reviewer's holistic judgment. It is fallible. The pass floor is not the score alone. It is `score ≥ 9.0 AND C = 0 AND I = 0`. A score of 9.5 with one Critical finding does not pass. A score of 9.0 with three Minors does. The conjunction is non-negotiable.
 
 **§4.2.1 What the contract binds, and what it doesn't.**
-The floor is a contract over the *pass decision*: given the findings as classified, ship/no-ship is determined by rule, not by operator mood or reviewer tone. It removes discretion-creep ("it's basically fine, ship it"). It does **not** guarantee the reviewer classified correctly. A reviewer that misclassifies a Critical as Minor passes the floor silently, and the floor itself has no internal detection loop for that. That residual risk lives in the reviewer-reliability layer, not in the floor. RJ mitigates it (classify-upward-when-uncertain in the priming, cross-model dispatch for high-stakes work per §9, and the Operator owning the final ship decision) but does not eliminate it. The floor makes the decision rule honest. It does not make the reviewer infallible.
+The floor is a contract over the *pass decision*: given the findings as classified, pass/revise is determined by rule, not by operator mood or reviewer tone. It removes discretion-creep ("it's basically fine, let it through"). It does **not** guarantee the reviewer classified correctly. A reviewer that misclassifies a Critical as Minor passes the floor silently, and the floor itself has no internal detection loop for that. That residual risk lives in the reviewer-reliability layer, not in the floor. RJ mitigates it (classify-upward-when-uncertain in the priming, cross-model dispatch for high-stakes work per §9, and the Operator owning the final release decision) but does not eliminate it. The floor makes the decision rule honest. It does not make the reviewer infallible. A verdict is a review judgment: it can be wrong, and it is not authorization to deploy or release.
 
 **§4.3 No score inflation.**
 The reviewer is primed to score conservatively. A reviewer that defaults to 9+ on every submission is broken. The operator should periodically audit verdicts for distribution; if scores cluster above 9.0 without corresponding empirical quality, re-prime the reviewer.
@@ -111,7 +111,7 @@ The variant is an operator decision, fixed for a class of work and applied unifo
 First dispatch. Reviewer receives the work product, scope, and modality. Returns a verdict in the §7 format.
 
 **§5.2 Pass at R1.**
-If `score ≥ 9.0 AND C = 0 AND I = 0`, the work product is ship-ready. Halt. Address Minors at Author discretion.
+If `score ≥ 9.0 AND C = 0 AND I = 0`, the work product passes the floor. Halt. A pass is a review judgment, not authorization to deploy or release. Address Minors at Author discretion.
 
 **§5.3 Fail at R1 - dispatch R2.**
 If the floor is not met, the Author addresses Critical and Important findings. Each addressed finding is referenced by ID. The R2 dispatch includes the original work product, the modified work product, and the R1 verdict.
@@ -123,7 +123,7 @@ Reviewer verifies that R1 findings have been addressed. May surface new findings
 The protocol halts when any of the following hold:
 
 - **Pass.** Floor met (`score ≥ 9.0 AND C = 0 AND I = 0`).
-- **Diminishing-returns halt.** After R2 (sometimes R3), if findings begin to be cosmetic preferences rather than substantive issues, the Operator halts and ships at the current verdict if the floor is met. The protocol assumes good-faith application of the floor. Operators do not run a fourth round looking for reassurance.
+- **Diminishing-returns halt.** After R2 (sometimes R3), if findings begin to be cosmetic preferences rather than substantive issues, the Operator halts at the current verdict if the floor is met. The protocol assumes good-faith application of the floor. Operators do not run a fourth round looking for reassurance.
 - **Escalation halt.** If R3 still fails the floor, the protocol escalates to either (a) a different reviewer (per §9 modalities), or (b) human review. Continuing to dispatch the same reviewer past R3 on the same work product wastes cycles.
 - **Operator override.** The Operator may halt at any verdict that includes only Important findings if the Operator accepts the residual risk and documents the override. The override record must name *who* authorized it, *which* Important findings are being accepted, the *residual-risk rationale*, and the *date*, captured wherever verdicts are stored (commit message, review log, or PR comment). An override without that record is indistinguishable from ignoring the finding. Critical findings are not subject to override.
 
